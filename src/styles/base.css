@@ -1,0 +1,49 @@
+@import url('./root.css');
+
+html {
+  scroll-behavior: smooth;
+  ::-webkit-scrollbar {
+    width: 0.2rem;
+    height: 0.3rem;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 100vw;
+  }
+  ::-webkit-scrollbar-track {
+    margin-block: 0.1rem;
+    margin-inline: 0.1rem;
+    background: var(--bg-selection);
+  }
+  ::-webkit-scrollbar-corner {
+    display: none;
+  }
+
+  /* selection */
+  ::-moz-selection {
+    background-color: var(--bg-selection);
+    color: var(--primary);
+  }
+  ::selection {
+    background-color: var(--bg-selection);
+    color: var(--primary);
+  }
+  scrollbar-gutter: stable;
+}
+
+body {
+  color: var(--underlay-dark);
+  background-color: var(--underlay-light);
+  font-family: var(--main-source);
+  display: grid;
+  min-height: 100dvh;
+  grid-template-rows: auto 1fr auto;
+}
+
+/* We adapt them to the dark mode.  */
+@media (prefers-color-scheme: dark) {
+  body {
+    color: var(--underlay-light);
+    background-color: var(--underlay-dark);
+  }
+}

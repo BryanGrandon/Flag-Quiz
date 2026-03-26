@@ -1,119 +1,52 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
-
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
+      <header className='test'>
+        <h1>Flag Quiz</h1>
+        <p>
+          Welcome to the Flag Quiz! Test your knowledge of world flags and see how many you can identify correctly. Whether you're a geography enthusiast or just looking for a fun challenge, this quiz
+          is perfect for you. Get ready to explore the colorful world of flags and discover interesting facts about different countries along the way. Good luck, and have fun playing!
+        </p>
+      </header>
+
+      <main>
+        <article>
+          <h2>How to Play</h2>
           <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
+            To play the Flag Quiz, simply click on the "Start Quiz" button below. You will be presented with a series of questions, each showing a flag and multiple-choice options for the country it
+            represents. Select the correct answer for each question to earn points. The quiz will keep track of your score and provide feedback on your answers. At the end of the quiz, you'll see your
+            final score and have the option to play again or share your results with friends. Good luck, and have fun testing your flag knowledge!
           </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+        </article>
 
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
+        <article>
+          <h2>Games</h2>
           <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
+            <li>Flag Quiz</li>
+            <li>Country Capital Quiz</li>
+            <li></li>
           </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+        </article>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
+        <article>
+          <h2>Game?</h2>
+          <article>
+            <h3>Game Modes</h3>
+            <p>Multiple options (Button)</p>
+            <p>Write answer (button)</p>
+          </article>
+
+          <article>
+            <section>
+              <p>Flag</p>
+            </section>
+            <section>
+              <p>Change UI (Game modes)</p>
+              <p>Options or Write Answer</p>
+            </section>
+          </article>
+        </article>
+      </main>
     </>
   )
 }

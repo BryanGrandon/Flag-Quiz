@@ -1,0 +1,41 @@
+@import 'tailwindcss';
+@import './root.css'; /* root */
+
+@theme {
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-underlay-dark: var(--underlay-dark);
+  --color-underlay-light: var(--underlay-light);
+  --font-basicaline: var(--custom-source);
+}
+
+@layer {
+  .overlay {
+    position: relative;
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: #000000a9;
+      color: #0307266e;
+    }
+  }
+
+  .glassmorphism {
+    background: rgba(0, 0, 0, 0.507);
+    border-radius: 0.5rem;
+    backdrop-filter: blur(0.2rem);
+    -webkit-backdrop-filter: blur(0.2rem);
+    border: 1px solid rgba(0, 0, 0, 0.082);
+    @media (prefers-color-scheme: dark) {
+      border: 1px solid rgba(255, 255, 255, 0.171);
+    }
+  }
+
+  .test {
+    border: 1px solid #f00;
+  }
+}
