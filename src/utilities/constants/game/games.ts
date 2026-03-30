@@ -35,3 +35,5 @@ export const GAMES = [
     routes: ROUTES.GUESS_CAPITAL, // Create route
   },
 ]
+
+export const GAME_FLIP = {}

@@ -12,6 +12,6 @@ export const GAME_MODE_OPTIONS = [
   {
     id: 2,
     text: 'Write answer mode',
-    value: GAME_MODES.MULTIPLE,
+    value: GAME_MODES.WRITE,
   },
 ]

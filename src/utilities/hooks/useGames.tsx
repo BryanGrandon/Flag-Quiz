@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { KEY_GAMES } from '../constants/game/games'
 
 export const useGames = () => {
-  const [selectedGameOptions, setSelectedGameOptions] = useState({
+  type GameKey = 'guessCountry' | 'guessCapital'
+  const [selectedGameOptions, setSelectedGameOptions] = useState<Record<GameKey, string>>({
     guessCountry: 'multiple',
     guessCapital: 'multiple',
   })
