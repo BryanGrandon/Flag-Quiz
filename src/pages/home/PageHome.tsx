@@ -13,7 +13,7 @@ const PageHome = () => {
           <h2 className='font-basicaline text-3xl py-4'>Game Modes</h2>
           <article className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 '>
             {GAMES.map((game) => (
-              <GameCardFlip gameKey={game.key} {...game} />
+              <GameCardFlip key={game.id} theId={game.id} gameKey={game.key} front={game.front} back={game.back} />
             ))}
           </article>
         </article>
