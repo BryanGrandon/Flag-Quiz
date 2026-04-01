@@ -1,6 +1,8 @@
+import Button from '../../../components/ui/Button'
 import { GAME_MODE_OPTIONS } from '../../../utilities/constants/game/gameModes'
 import { useGames } from '../../../utilities/hooks/useGames'
 import type { game_key } from '../../../utilities/interfaces/games'
+import SelectButton from './SelectButton'
 
 type game_card = {
   gameKey: game_key
@@ -30,22 +32,14 @@ const GameCard = ({ gameKey, front, buttons }: game_card) => {
           <h3>Game Options</h3>
           <section className='flex flex-col gap-1 pl-4'>
             {GAME_MODE_OPTIONS.map((option) => (
-              <button key={option.id} className='flex items-center gap-2 button border border-gray-700 w-full' onClick={() => updateGameOption({ key: gameKey, value: option.value })}>
-                <span className={`w-2 h-2 rounded-full ${activeOption === option.value ? 'bg-blue-500' : 'bg-gray-500'}`}></span>
-                {option.text}
-              </button>
+              <SelectButton text={option.text} checked={activeOption} value={option.value} onClick={() => updateGameOption({ key: gameKey, value: option.value })} />
             ))}
           </section>
         </section>
       ) : null}
       <section className='grid grid-cols-2 gap-3'>
-        {/* Create a component for buttons */}
-        <button onClick={buttons?.howToPlay} className='button bg-gray-500 text-white hover:bg-gray-600'>
-          How to Play
-        </button>
-        <button onClick={buttons?.startQuiz} className='button bg-blue-500 text-white hover:bg-blue-600'>
-          Start Quiz
-        </button>
+        <Button text='How to Play' onClick={buttons?.howToPlay} moreClasses='bg-gray-500 hover:bg-gray-600 text-white' />
+        <Button text='Start Quiz' onClick={buttons?.startQuiz} moreClasses='bg-blue-500 hover:bg-blue-600 text-white' />
       </section>
     </section>
   )
