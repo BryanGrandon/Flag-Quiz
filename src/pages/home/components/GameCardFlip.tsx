@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import GameCard from './GameCard'
 import type { game_key } from '../../../utilities/interfaces/games'
+import Button from '../../../components/ui/Button'
 
 type game_card_flip = {
   theId: number
@@ -36,13 +37,11 @@ const GameCardFlip = ({ theId, gameKey, front, back }: game_card_flip) => {
               ))}
             </section>
 
-            <button onClick={() => setFlip(!flip)} className='border border-gray-600 py-2 rounded-lg hover:bg-gray-700 transition cursor-pointer'>
-              Flip Back
-            </button>
+            <Button onClick={() => setFlip(!flip)} text='Flip Back' moreClasses='border border-gray-600 hover:bg-gray-700 ' />
           </section>
         </section>
 
-        <section className='invisible p-0'>
+        <section className='invisible h-full'>
           <GameCard key={theId} gameKey={gameKey} front={front} buttons={{ howToPlay: () => setFlip(!flip), startQuiz: () => {} }} />
         </section>
       </article>
