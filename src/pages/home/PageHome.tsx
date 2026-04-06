@@ -1,8 +1,11 @@
+import { useEffect, useState } from 'react'
 import { GAMES } from '../../utilities/constants/game/games'
+import { useHookContext } from '../../utilities/hooks/useHookContext'
 import GameModeCard from './components/GameModeCard'
-// import GameCardFlip from './components/GameCardFlip'
 
 const PageHome = () => {
+  const { options } = useHookContext()
+
   return (
     <>
       <header className='p-4 max-w-350 mx-auto flex flex-col gap-2 min-h-50 items-center justify-center'>
@@ -20,6 +23,10 @@ const PageHome = () => {
         </article>
         <article>
           <h2 className='font-basicaline text-3xl py-4'>Streak</h2>
+          <section className='flex flex-col gap-4'>
+            <button onClick={() => options.game.countryGame.multipleChoice()}>Click Test Country</button>
+            <button onClick={() => options.game.capitalGame.multipleChoice()}>Click Test Capital</button>
+          </section>
         </article>
       </main>
     </>
