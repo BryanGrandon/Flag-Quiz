@@ -3,7 +3,10 @@ import { useHookContext } from '../../utilities/hooks/useHookContext'
 import GameModeCard from './components/GameModeCard'
 
 const PageHome = () => {
-  const { gameMode } = useHookContext()
+  const { gameMode, options } = useHookContext()
+
+  const countryOption = options.get.GameOption({ type: 'country' })
+  const capitalOption = options.get.GameOption({ type: 'capital' })
 
   return (
     <>
@@ -25,6 +28,19 @@ const PageHome = () => {
           <section className='flex flex-col gap-4'>
             <button onClick={() => gameMode.multipleChoice('country')}>Click Test Country</button>
             <button onClick={() => gameMode.multipleChoice('capital')}>Click Test Capital</button>
+          </section>
+        </article>
+        <article>
+          <h2 className='font-basicaline text-3xl py-4'>Options</h2>
+          <section className='test'>
+            <p>Country Option: {countryOption}</p>
+            <p>Capital Option: {capitalOption}</p>
+          </section>
+          <section className='flex flex-col gap-4'>
+            <button onClick={() => options.set.GameOption({ type: 'country', value: 'write' })}>Set Country Option to writing</button>
+            <button onClick={() => options.set.GameOption({ type: 'capital', value: 'write' })}>Set Capital Option to writing</button>
+            <button onClick={() => options.set.GameOption({ type: 'country', value: 'multiple_choice' })}>Set Country Option to multiple choice</button>
+            <button onClick={() => options.set.GameOption({ type: 'capital', value: 'multiple_choice' })}>Set Capital Option to multiple choice</button>
           </section>
         </article>
       </main>
