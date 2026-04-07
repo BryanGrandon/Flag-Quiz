@@ -1,10 +1,9 @@
-import { useEffect, useState } from 'react'
 import { GAMES } from '../../utilities/constants/game/games'
 import { useHookContext } from '../../utilities/hooks/useHookContext'
 import GameModeCard from './components/GameModeCard'
 
 const PageHome = () => {
-  const { options } = useHookContext()
+  const { gameMode } = useHookContext()
 
   return (
     <>
@@ -24,8 +23,8 @@ const PageHome = () => {
         <article>
           <h2 className='font-basicaline text-3xl py-4'>Streak</h2>
           <section className='flex flex-col gap-4'>
-            <button onClick={() => options.game.countryGame.multipleChoice()}>Click Test Country</button>
-            <button onClick={() => options.game.capitalGame.multipleChoice()}>Click Test Capital</button>
+            <button onClick={() => gameMode.multipleChoice('country')}>Click Test Country</button>
+            <button onClick={() => gameMode.multipleChoice('capital')}>Click Test Capital</button>
           </section>
         </article>
       </main>

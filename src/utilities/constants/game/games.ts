@@ -1,9 +1,9 @@
 import { ROUTES } from '../routes/paths'
 
 export const KEY_GAMES = {
-  COUNTRY: 'guessCountry',
-  CAPITAL: 'guessCapital',
-  POPULATION: 'guessPopulation',
+  COUNTRY: 'country',
+  CAPITAL: 'capital',
+  POPULATION: 'population',
 }
 
 export const GAMES = [

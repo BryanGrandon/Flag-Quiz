@@ -1,4 +1,4 @@
 import React from 'react'
-import type { game_country_type } from '../utilities/interfaces/games'
+import type { GameContext } from '../utilities/interfaces/gameContext'
 
-export const GameCountryContext = React.createContext<game_country_type>({} as game_country_type)
+export const GameCountryContext = React.createContext<GameContext>({} as GameContext)
