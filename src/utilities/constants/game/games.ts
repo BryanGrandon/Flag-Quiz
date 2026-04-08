@@ -40,7 +40,9 @@ export const GAMES = [
     id: 1,
     key: KEY_GAMES.COUNTRY,
     title: 'Guess the Country',
-    howToPlay: ['Guess the country from a random flag.', 'Choose the correct option or type the answer depending on the selected mode. ', 'Score points for each correct answer!'],
+    howToPlay: [
+      `Guess the country based on a randomly displayed flag. Select the correct option or type in your answer, depending on the game mode you've chosen. Earn points for each correct answer and challenge yourself to get the highest score possible!`,
+    ],
     routes: ROUTES.GUESS_COUNTRY,
     img: {
       src: '',

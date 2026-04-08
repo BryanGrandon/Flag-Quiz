@@ -19,7 +19,7 @@ const PageHome = () => {
           <h2 className='font-basicaline text-3xl py-4'>Game Modes</h2>
           <article className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 '>
             {GAMES.map((game) => (
-              <GameModeCard title={game.title} howToPlay={game.howToPlay} routes={game.routes} img={game.img} />
+              <GameModeCard key={game.id} type={game.key} title={game.title} howToPlay={game.howToPlay} routes={game.routes} img={game.img} />
             ))}
           </article>
         </article>

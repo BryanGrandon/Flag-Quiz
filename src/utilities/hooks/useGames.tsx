@@ -1,13 +1,12 @@
 import { useState } from 'react'
-import { KEY_GAMES } from '../constants/game/games'
+import { GAME_MODES, KEY_GAMES } from '../constants/game/games'
 import type { game_key } from '../interfaces/games'
-import { GAME_MODES } from '../constants/game/gameModes'
 
 export const useGames = () => {
   const [selectedGameOptions, setSelectedGameOptions] = useState<Record<game_key, string>>({
-    guessCountry: GAME_MODES.MULTIPLE,
-    guessCapital: GAME_MODES.MULTIPLE,
-    guessPopulation: GAME_MODES.MULTIPLE,
+    guessCountry: GAME_MODES.MULTIPLE_CHOICE,
+    guessCapital: GAME_MODES.MULTIPLE_CHOICE,
+    guessPopulation: GAME_MODES.MULTIPLE_CHOICE,
   })
 
   type update_game_option = {
