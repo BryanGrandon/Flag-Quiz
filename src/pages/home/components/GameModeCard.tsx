@@ -1,8 +1,7 @@
 import Button from '../../../components/ui/Button'
-import { GAME_MODE_OPTIONS, GAME_MODES, GAME_TYPE } from '../../../utilities/constants/game/games'
-import { useHookContext } from '../../../utilities/hooks/useHookContext'
-import type { GameType } from '../../../utilities/interfaces/gameContext'
-import SelectButton from './SelectButton'
+// import { useHookContext } from '../../../utilities/hooks/useHookContext'
+// import type { GameType } from '../../../utilities/interfaces/gameContext'
+// import SelectButton from './SelectButton'
 
 type game_mode_card = {
   title: string
@@ -15,12 +14,12 @@ type game_mode_card = {
   routes: string
 }
 
-const GameModeCard = ({ title, howToPlay, img, routes, type }: game_mode_card) => {
-  const { options } = useHookContext()
+const GameModeCard = ({ title, howToPlay, img, routes }: game_mode_card) => {
+  // const { options } = useHookContext()
 
-  const optionSelected = type as GameType
-  const isGameType = Object.values(GAME_TYPE).includes(type as GameType)
-  const activeOption = isGameType ? options.get.GameOption({ type: optionSelected }) : GAME_MODES.MULTIPLE_CHOICE
+  // const optionSelected = type as GameType
+  // const isGameType = Object.values(GAME_TYPE).includes(type as GameType)
+  // const activeOption = isGameType ? options.get.GameOption({ type: optionSelected }) : GAME_MODES.MULTIPLE_CHOICE
 
   const redirectToGame = () => {
     window.location.href = routes
@@ -42,19 +41,19 @@ const GameModeCard = ({ title, howToPlay, img, routes, type }: game_mode_card) =
           ))}
         </div>
         <span className='h-px rounded-xl w-full bg-gray-400 my-2'></span>
-        {isGameType ? (
+        {/* {isGameType ? (
           <>
             <section className=' space-y-2'>
               <h3 className='text-xl font-basicaline'>Game Options</h3>
               <section className='flex flex-row gap-2 '>
-                {GAME_MODE_OPTIONS.map((option) => (
+                {GAME_MODE_OPTI.map((option) => (
                   <SelectButton key={option.id} text={option.text} checked={activeOption} value={option.value} onClick={() => options.set.GameOption({ type: optionSelected, value: option.value })} />
                 ))}
               </section>
             </section>
             <span className='h-px rounded-xl w-full bg-gray-400 my-2'></span>
           </>
-        ) : null}
+        ) : null} */}
       </section>
       <Button text='Start Quiz' onClick={redirectToGame} moreClasses='bg-secondary hover:bg-secondary/80 text-black w-full' />
     </article>

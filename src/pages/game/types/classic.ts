@@ -8,3 +8,8 @@ export interface FlagImage {
   svg: string
   alt: string
 }
+
+export interface GameRound {
+  image: FlagImage
+  options: string[]
+}

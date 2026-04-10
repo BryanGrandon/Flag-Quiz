@@ -40,3 +40,17 @@ export const CLASSIC_GAMES = [
     },
   },
 ]
+
+// For UI
+export const GAME_MODE_OPTIONS = [
+  {
+    id: 1,
+    text: 'Multiple choice mode',
+    value: CLASSIC_MODES.MULTIPLE_CHOICE,
+  },
+  {
+    id: 2,
+    text: 'Writing answer mode',
+    value: CLASSIC_MODES.WRITING,
+  },
+]

@@ -9,12 +9,11 @@ const PageGame = () => {
   const type = params.get('type') as ClassicType | null
   const mode = params.get('mode') as ClassicModes | null
 
-  const { startClassicGame, image, isReady, options } = useClassicGame()
+  const { startClassicGame, isReady, gameRound } = useClassicGame()
 
   useEffect(() => {
     if (!type || !mode) return
     if (!isReady) return
-
     startClassicGame(type, mode)
   }, [startClassicGame, type, mode, isReady])
 
@@ -23,10 +22,10 @@ const PageGame = () => {
       <article>
         <h2>Game</h2>
         <section className='test '>
-          <img src={image?.svg} alt='' />
-          {options.length > 0 ? (
+          <img src={gameRound.image?.svg} alt='' />
+          {gameRound.options.length > 0 ? (
             <section>
-              {options.map((el) => (
+              {gameRound.options.map((el) => (
                 <p>{el}</p>
               ))}
             </section>
