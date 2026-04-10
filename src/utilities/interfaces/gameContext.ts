@@ -1,7 +1,8 @@
-import { GAME_MODES, GAME_TYPE } from '../constants/game/games'
+import { GAME_MODES, KEY_GAMES } from '../constants/game/games'
 
 export type GameMode = (typeof GAME_MODES)[keyof typeof GAME_MODES]
-export type GameType = (typeof GAME_TYPE)[keyof typeof GAME_TYPE]
+export type GameType = typeof KEY_GAMES.COUNTRY | typeof KEY_GAMES.CAPITAL
+export type AllGameType = GameType | typeof KEY_GAMES.POPULATION
 
 export interface GameContext {
   options: {
@@ -12,10 +13,7 @@ export interface GameContext {
       GameOption: ({ type }: { type: GameType }) => GameMode
     }
   }
-  gameMode: {
-    multipleChoice: (value: GameType) => void
-    writing: (value: GameType) => void
-  }
+  startTheGame: ({ type }: { type: AllGameType }) => void
 }
 
 // Inside GameCountryProvider.tsx

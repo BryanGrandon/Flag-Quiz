@@ -19,7 +19,7 @@ const router = createHashRouter([
         hydrateFallbackElement: TheFallback('Loading Home'),
       },
       {
-        path: 'game',
+        path: 'classic-game',
         lazy: async () => {
           const PageGame = await import('./pages/game/PageGame')
           return { Component: PageGame.default }

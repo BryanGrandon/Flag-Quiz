@@ -2,20 +2,20 @@ import { useEffect, useState } from 'react'
 import { GameCountryContext } from './GameCountryContext'
 // import { GAME_MODES } from '../utilities/constants/game/gameModes'
 import { GAME_MODES, GAME_TYPE, KEY_GAMES } from '../utilities/constants/game/games'
-import { fetchData } from '../services/api/fetchData'
-import { ALL_FLAGS_URL } from '../utilities/constants/config/api'
+
 import type { Country } from '../utilities/interfaces/games'
-import type { GameMode, GameType, ImageOfTheFlag } from '../utilities/interfaces/gameContext'
+import type { AllGameType, GameMode, GameType, ImageOfTheFlag } from '../utilities/interfaces/gameContext'
+import fetchCountries from '../services/api/fetchCountries'
 
 const GameCountryProvider = ({ children }: { children: React.ReactNode }) => {
-  const [allFlags, setAllFlags] = useState<Country[]>([])
+  const [allCountries, setAllCountries] = useState<Country[]>([])
   const [remainingFlags, setRemainingFlags] = useState<Country[]>([])
   // const [isCorrectAnswer, setIsCorrectAnswer] = useState<boolean | null>(null) // Change UI based on correct or wrong answer
 
   useEffect(() => {
     const getAllCountries = async () => {
-      const data = await fetchData(ALL_FLAGS_URL)
-      setAllFlags(data)
+      const data = await fetchCountries()
+      setAllCountries(data)
       setRemainingFlags(data)
     }
 
@@ -25,7 +25,7 @@ const GameCountryProvider = ({ children }: { children: React.ReactNode }) => {
   // ===== Country and Country Game Logic ===== //
 
   const [winningValue, setWinningValue] = useState<string>('')
-  const [options, setOptions] = useState<string[]>([])
+  const [answerChoices, setAnswerChoices] = useState<string[]>([])
   const [imageOfTheFlag, setImageOfTheFlag] = useState<ImageOfTheFlag>()
 
   const getValue = (item: Country, type: GameType) => {
@@ -61,12 +61,11 @@ const GameCountryProvider = ({ children }: { children: React.ReactNode }) => {
   const startMultipleChoiceGame = (type: GameType) => {
     const winner = selectWinner(type)
     const multipleOptions = generateOption(winner, type)
-    setOptions(multipleOptions)
+    setAnswerChoices(multipleOptions)
     // XXXXXXXXXXXXXXXXXXXXXXXXXXXX Delete XXXXXXXXXXXXXXXXXXXXXXXXXXXX //
     console.log(multipleOptions)
     console.log(imageOfTheFlag)
     console.log(winningValue)
-    console.log(options)
     // XXXXXXXXXXXXXXXXXXXXXXXXXXXX Delete XXXXXXXXXXXXXXXXXXXXXXXXXXXX //
   }
 
@@ -99,6 +98,28 @@ const GameCountryProvider = ({ children }: { children: React.ReactNode }) => {
     throw new Error('Invalid game type')
   }
 
+  // ===== Start Game ===== //
+
+  const [gameTypeSelected, setGameTypeSelected] = useState<AllGameType>()
+
+  const StartTheGame = ({ type }: { type: AllGameType }) => {
+    switch (type) {
+      case GAME_TYPE.COUNTRY:
+        setGameTypeSelected(type)
+        if (selectedGameOptionCountry === GAME_MODES.MULTIPLE_CHOICE) startGamesModes.multipleChoice(type)
+        else startGamesModes.writing(type)
+        break
+
+      case GAME_TYPE.CAPITAL:
+        setGameTypeSelected(type)
+        if (selectedGameOptionCapital === GAME_MODES.MULTIPLE_CHOICE) startGamesModes.multipleChoice(type)
+        else startGamesModes.writing(type)
+        break
+    }
+  }
+
+  // ===== Build Game Data Logic ===== //
+
   return (
     <GameCountryContext.Provider
       value={{
@@ -110,7 +131,7 @@ const GameCountryProvider = ({ children }: { children: React.ReactNode }) => {
             GameOption: getGameOption,
           },
         },
-        gameMode: startGamesModes,
+        startTheGame: StartTheGame,
       }}
     >
       {children}

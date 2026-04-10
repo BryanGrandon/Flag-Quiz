@@ -4,7 +4,7 @@ export const KEY_GAMES = {
   COUNTRY: 'country',
   CAPITAL: 'capital',
   POPULATION: 'population',
-}
+} as const
 
 // ===== Game Types ===== //
 

@@ -1,12 +1,9 @@
-import { GAMES } from '../../utilities/constants/game/games'
-import { useHookContext } from '../../utilities/hooks/useHookContext'
+import { CLASSIC_GAMES } from '../game/constants/classic'
 import GameModeCard from './components/GameModeCard'
+import { useStartClassicGame } from './hook/useStartClassicGame'
 
 const PageHome = () => {
-  const { gameMode, options } = useHookContext()
-
-  const countryOption = options.get.GameOption({ type: 'country' })
-  const capitalOption = options.get.GameOption({ type: 'capital' })
+  const { startClassicGame } = useStartClassicGame()
 
   return (
     <>
@@ -18,30 +15,16 @@ const PageHome = () => {
         <article>
           <h2 className='font-basicaline text-3xl py-4'>Game Modes</h2>
           <article className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 '>
-            {GAMES.map((game) => (
+            {CLASSIC_GAMES.map((game) => (
               <GameModeCard key={game.id} type={game.key} title={game.title} howToPlay={game.howToPlay} routes={game.routes} img={game.img} />
             ))}
           </article>
         </article>
-        <article>
-          <h2 className='font-basicaline text-3xl py-4'>Streak</h2>
-          <section className='flex flex-col gap-4'>
-            <button onClick={() => gameMode.multipleChoice('country')}>Click Test Country</button>
-            <button onClick={() => gameMode.multipleChoice('capital')}>Click Test Capital</button>
-          </section>
-        </article>
-        <article>
-          <h2 className='font-basicaline text-3xl py-4'>Options</h2>
-          <section className='test'>
-            <p>Country Option: {countryOption}</p>
-            <p>Capital Option: {capitalOption}</p>
-          </section>
-          <section className='flex flex-col gap-4'>
-            <button onClick={() => options.set.GameOption({ type: 'country', value: 'write' })}>Set Country Option to writing</button>
-            <button onClick={() => options.set.GameOption({ type: 'capital', value: 'write' })}>Set Capital Option to writing</button>
-            <button onClick={() => options.set.GameOption({ type: 'country', value: 'multiple_choice' })}>Set Country Option to multiple choice</button>
-            <button onClick={() => options.set.GameOption({ type: 'capital', value: 'multiple_choice' })}>Set Capital Option to multiple choice</button>
-          </section>
+        <article className='flex flex-col p-4 gap-4'>
+          <button onClick={() => startClassicGame({ type: 'country', mode: 'multiple_choice' })}>Country - options</button>
+          <button onClick={() => startClassicGame({ type: 'country', mode: 'writing' })}>Country - write</button>
+          <button onClick={() => startClassicGame({ type: 'capital', mode: 'multiple_choice' })}>Capital - options</button>
+          <button onClick={() => startClassicGame({ type: 'capital', mode: 'writing' })}>Capital - write</button>
         </article>
       </main>
     </>
