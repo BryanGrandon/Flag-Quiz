@@ -4,6 +4,7 @@ import type { ClassicModes, ClassicType } from './types/classic'
 import { useEffect } from 'react'
 
 const PageGame = () => {
+  // PageClassicGame
   const [params] = useSearchParams()
 
   const type = params.get('type') as ClassicType | null
@@ -16,6 +17,8 @@ const PageGame = () => {
     if (!isReady) return
     startClassicGame(type, mode)
   }, [startClassicGame, type, mode, isReady])
+
+  // Save round if reload or F5
 
   return (
     <main>

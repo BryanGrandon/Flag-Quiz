@@ -1,10 +1,7 @@
 import { CLASSIC_GAMES } from '../game/constants/classic'
-import GameModeCard from './components/GameModeCard'
-import { useStartClassicGame } from './hook/useStartClassicGame'
+import GameClassicCard from './components/GameClassicCard'
 
 const PageHome = () => {
-  const { startClassicGame } = useStartClassicGame()
-
   return (
     <>
       <header className='p-4 max-w-350 mx-auto flex flex-col gap-2 min-h-50 items-center justify-center'>
@@ -15,16 +12,10 @@ const PageHome = () => {
         <article>
           <h2 className='font-basicaline text-3xl py-4'>Game Modes</h2>
           <article className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 '>
-            {/* {CLASSIC_GAMES.map((game) => (
-              <GameModeCard key={game.id} type={game.key} title={game.title} howToPlay={game.howToPlay} routes={game.routes} img={game.img} />
-            ))} */}
+            {CLASSIC_GAMES.map((game) => (
+              <GameClassicCard key={game.id} id={game.id} keyType={game.keyType} title={game.title} howToPlay={game.howToPlay} img={game.img} options={game.options} />
+            ))}
           </article>
-        </article>
-        <article className='flex flex-col p-4 gap-4'>
-          <button onClick={() => startClassicGame({ type: 'country', mode: 'multiple_choice' })}>Country - options</button>
-          <button onClick={() => startClassicGame({ type: 'country', mode: 'writing' })}>Country - write</button>
-          <button onClick={() => startClassicGame({ type: 'capital', mode: 'multiple_choice' })}>Capital - options</button>
-          <button onClick={() => startClassicGame({ type: 'capital', mode: 'writing' })}>Capital - write</button>
         </article>
       </main>
     </>

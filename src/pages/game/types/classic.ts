@@ -13,3 +13,19 @@ export interface GameRound {
   image: FlagImage
   options: string[]
 }
+
+export interface ClassicGame {
+  id: number
+  keyType: ClassicType
+  title: string
+  howToPlay: string[]  
+  img: {
+    src: string
+    alt: string
+  }
+  options: {
+    id: number
+    text: string
+    value: ClassicModes
+  }[]
+}
