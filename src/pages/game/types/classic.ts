@@ -18,7 +18,7 @@ export interface ClassicGame {
   id: number
   keyType: ClassicType
   title: string
-  howToPlay: string[]  
+  howToPlay: string[]
   img: {
     src: string
     alt: string
@@ -28,4 +28,14 @@ export interface ClassicGame {
     text: string
     value: ClassicModes
   }[]
+}
+
+export interface SavedGame {
+  winner: string
+  image: {
+    png: string
+    svg: string
+    alt: string
+  }
+  options: string[]
 }
