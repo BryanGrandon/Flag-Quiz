@@ -1,4 +1,4 @@
-import type { Country } from '../../pages/game/types/country'
+import type { Country } from '../../pages/game/classic/types/country'
 import { COUNTRIES_API_URL } from '../../utilities/constants/config/api'
 import { fetchData } from './fetchData'
 

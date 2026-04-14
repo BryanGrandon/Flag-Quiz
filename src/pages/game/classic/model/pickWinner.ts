@@ -1,5 +1,5 @@
-import type { ClassicType } from '../../types/classic'
-import type { Country } from '../../types/country'
+import type { ClassicType } from '../types/classic'
+import type { Country } from '../types/country'
 import { getAnswerValue } from './getAnswerValue'
 
 type PickWinner = {

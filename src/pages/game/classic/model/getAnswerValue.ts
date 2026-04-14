@@ -1,6 +1,6 @@
-import { CLASSIC_TYPES } from '../../constants/classic'
-import type { ClassicType } from '../../types/classic'
-import type { Country } from '../../types/country'
+import { CLASSIC_TYPES } from '../constants/classic'
+import type { ClassicType } from '../types/classic'
+import type { Country } from '../types/country'
 
 export const getAnswerValue = (item: Country, type: ClassicType) => {
   if (!item) return ''

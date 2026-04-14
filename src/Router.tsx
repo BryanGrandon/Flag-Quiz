@@ -1,5 +1,6 @@
 import { createHashRouter, RouterProvider } from 'react-router-dom'
-import Layout from './pages/Layout'
+import Layout from './layout/Layout'
+import Games from './layout/Games'
 
 const TheFallback = (text: string) => {
   return <p>{text}</p>
@@ -19,12 +20,26 @@ const router = createHashRouter([
         hydrateFallbackElement: TheFallback('Loading Home'),
       },
       {
-        path: 'classic-game',
-        lazy: async () => {
-          const PageGame = await import('./pages/game/PageGame')
-          return { Component: PageGame.default }
-        },
-        hydrateFallbackElement: TheFallback('Loading Game'),
+        path: 'game',
+        element: <Games />,
+        children: [
+          {
+            path: 'classic',
+            lazy: async () => {
+              const Classic = await import('./pages/game/classic/ClassicPage')
+              return { Component: Classic.default }
+            },
+            hydrateFallbackElement: TheFallback('Loading Game'),
+          },
+          {
+            path: 'comparison',
+            lazy: async () => {
+              const Classic = await import('./pages/game/comparison/ComparisonPage')
+              return { Component: Classic.default }
+            },
+            hydrateFallbackElement: TheFallback('Loading Game'),
+          },
+        ],
       },
     ],
   },

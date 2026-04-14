@@ -1,4 +1,4 @@
-import { CLASSIC_GAMES } from '../game/constants/classic'
+import { CLASSIC_GAMES } from '../game/classic/constants/classic'
 import GameClassicCard from './components/GameClassicCard'
 
 const PageHome = () => {

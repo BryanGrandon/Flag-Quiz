@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { generateAnswerOptions } from '../logic/classic/generateAnswerOptions'
-import fetchCountries from '../../../services/api/fetchCountries'
-import { pickWinner } from '../logic/classic/pickWinner'
+import { generateAnswerOptions } from '../model/generateAnswerOptions'
+import fetchCountries from '../../../../services/api/fetchCountries'
+import { pickWinner } from '../model/pickWinner'
 import { CLASSIC_MODES } from '../constants/classic'
 
 import type { ClassicModes, ClassicType, GameRound, SavedGame } from '../types/classic'

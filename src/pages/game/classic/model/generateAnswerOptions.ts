@@ -1,7 +1,7 @@
-import { CLASSIC_CONFIG } from '../../constants/classic'
+import { CLASSIC_CONFIG } from '../constants/classic'
 import { getAnswerValue } from './getAnswerValue'
-import type { ClassicType } from '../../types/classic'
-import type { Country } from '../../types/country'
+import type { ClassicType } from '../types/classic'
+import type { Country } from '../types/country'
 
 type GenerateAnswerOptions = {
   winner: string

@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import SelectButton from './SelectButton'
 import Button from '../../../components/ui/Button'
-import { CLASSIC_MODES } from '../../game/constants/classic'
+import { CLASSIC_MODES } from '../../game/classic/constants/classic'
 import { useStartClassicGame } from '../hook/useStartClassicGame'
-import type { ClassicGame, ClassicModes } from '../../game/types/classic'
+import type { ClassicGame, ClassicModes } from '../../game/classic/types/classic'
 
 const GameClassicCard = ({ title, howToPlay, img, keyType, options }: ClassicGame) => {
   const [activeMode, setActiveMode] = useState<ClassicModes>(CLASSIC_MODES.MULTIPLE_CHOICE)
