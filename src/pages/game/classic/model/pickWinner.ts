@@ -1,9 +1,9 @@
-import type { ClassicType } from '../types/classic'
+import type { QuestionType } from '../constants/question-type'
 import type { Country } from '../types/country'
 import { getAnswerValue } from './getAnswerValue'
 
 type PickWinner = {
-  type: ClassicType
+  type: QuestionType
   remainingCountries: Country[]
 }
 

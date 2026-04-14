@@ -1,15 +1,14 @@
-import { CLASSIC_TYPES } from '../constants/classic'
-import type { ClassicType } from '../types/classic'
+import { QUESTION_TYPES, type QuestionType } from '../constants/question-type'
 import type { Country } from '../types/country'
 
-export const getAnswerValue = (item: Country, type: ClassicType) => {
+export const getAnswerValue = (item: Country, type: QuestionType) => {
   if (!item) return ''
 
   switch (type) {
-    case CLASSIC_TYPES.COUNTRY:
+    case QUESTION_TYPES.COUNTRY:
       return item.name.common ?? ''
 
-    case CLASSIC_TYPES.CAPITAL:
+    case QUESTION_TYPES.CAPITAL:
       return item.capital?.[0] ?? ''
 
     default:

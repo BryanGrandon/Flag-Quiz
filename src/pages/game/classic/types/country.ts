@@ -1,23 +1,23 @@
-interface Flags {
+type Flags = {
   png: string
   svg: string
   alt: string
 }
 
-interface CountryNativeName {
+type CountryNativeName = {
   [key: string]: {
     official: string
     common: string
   }
 }
 
-interface CountryName {
+type CountryName = {
   common: string
   official: string
   nativeName: CountryNativeName
 }
 
-export interface Country {
+export type Country = {
   flags: Flags
   name: CountryName
   capital: string[]

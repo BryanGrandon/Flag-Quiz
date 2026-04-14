@@ -1,4 +1,4 @@
-import { CLASSIC_GAMES } from '../game/classic/constants/classic'
+import { CLASSIC_GAMES } from '../game/classic/data/classic.game'
 import GameClassicCard from './components/GameClassicCard'
 
 const PageHome = () => {
@@ -13,7 +13,7 @@ const PageHome = () => {
           <h2 className='font-basicaline text-3xl py-4'>Game Modes</h2>
           <article className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 '>
             {CLASSIC_GAMES.map((game) => (
-              <GameClassicCard key={game.id} id={game.id} keyType={game.keyType} title={game.title} howToPlay={game.howToPlay} img={game.img} options={game.options} />
+              <GameClassicCard key={game.id} id={game.id} questionType={game.questionType} title={game.title} description={game.description} image={game.image} options={game.options} />
             ))}
           </article>
         </article>

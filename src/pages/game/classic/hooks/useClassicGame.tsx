@@ -1,10 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { generateAnswerOptions } from '../model/generateAnswerOptions'
 import fetchCountries from '../../../../services/api/fetchCountries'
+import { generateAnswerOptions } from '../model/generateAnswerOptions'
 import { pickWinner } from '../model/pickWinner'
-import { CLASSIC_MODES } from '../constants/classic'
 
-import type { ClassicModes, ClassicType, GameRound, SavedGame } from '../types/classic'
+import { CLASSIC_MODE, type ClassicMode } from '../constants/modes'
+import type { QuestionType } from '../constants/question-type'
+
+import type { ClassicSavedGame } from '../types/storage'
+import type { GameRound } from '../types/round'
 import type { Country } from '../types/country'
 
 const useClassicGame = () => {
@@ -40,7 +43,7 @@ const useClassicGame = () => {
   })
 
   const startClassicGame = useCallback(
-    (type: ClassicType, mode: ClassicModes) => {
+    (type: QuestionType, mode: ClassicMode) => {
       if (!isReady) return
       const baseCountries = remainingCountriesRef.current.length > 0 ? remainingCountriesRef.current : allCountriesRef.current
       const saved = localStorage.getItem('savedGame')
@@ -53,12 +56,12 @@ const useClassicGame = () => {
       }
 
       const { winner, image, filterCountries } = pickWinner({ type, remainingCountries: baseCountries })
-      const options = mode === CLASSIC_MODES.MULTIPLE_CHOICE ? generateAnswerOptions({ winner, type, allCountries: allCountriesRef.current }) : []
+      const options = mode === CLASSIC_MODE.MULTIPLE_CHOICE ? generateAnswerOptions({ winner, type, allCountries: allCountriesRef.current }) : []
 
       setCorrectAnswer(winner)
       setGameRound({ image, options })
 
-      const savedGame: SavedGame = { winner, image, options }
+      const savedGame: ClassicSavedGame = { winner, image, options }
       loadSavedClassicGame({ key: KEY_SAVED_CLASSIC_GAME, object: savedGame })
       localStorage.setItem('savedGame', JSON.stringify(savedGame))
 
