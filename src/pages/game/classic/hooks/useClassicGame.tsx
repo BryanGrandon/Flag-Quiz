@@ -2,13 +2,13 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import fetchCountries from '../../../../services/api/fetchCountries'
 import { generateAnswerOptions } from '../model/generateAnswerOptions'
 import { pickWinner } from '../model/pickWinner'
-
 import { CLASSIC_MODE, type ClassicMode } from '../constants/modes'
 import type { QuestionType } from '../constants/question-type'
-
 import type { ClassicSavedGame } from '../types/storage'
 import type { GameRound } from '../types/round'
 import type { Country } from '../types/country'
+import { storage } from '../../../../utilities/storage'
+import { CLASSIC_GAME_CONFIG } from '../constants/config'
 
 const useClassicGame = () => {
   const allCountriesRef = useRef<Country[]>([])
@@ -25,17 +25,6 @@ const useClassicGame = () => {
     load()
   }, [])
 
-  // ===== Load Saved Game ===== // ---------------------------- Move --------------------------- //
-
-  const KEY_SAVED_CLASSIC_GAME = 'savedClassicGame'
-
-  const loadSavedClassicGame = ({ key, object }: { key: string; object: object }) => {
-    const saved = JSON.stringify(object)
-    localStorage.setItem(key, saved)
-  }
-
-  // ===== Start Classic Game Logic ===== //
-
   const [correctAnswer, setCorrectAnswer] = useState<string>('')
   const [gameRound, setGameRound] = useState<GameRound>({
     image: { svg: '', alt: '', png: '' },
@@ -46,10 +35,10 @@ const useClassicGame = () => {
     (type: QuestionType, mode: ClassicMode) => {
       if (!isReady) return
       const baseCountries = remainingCountriesRef.current.length > 0 ? remainingCountriesRef.current : allCountriesRef.current
-      const saved = localStorage.getItem('savedGame')
+      const saved = storage.load<ClassicSavedGame>(CLASSIC_GAME_CONFIG.STORAGE_KEYS.SAVED_GAME)
 
       if (saved) {
-        const { winner, image, options } = JSON.parse(saved)
+        const { winner, image, options } = saved
         setCorrectAnswer(winner)
         setGameRound({ image: image, options })
         return
@@ -62,8 +51,7 @@ const useClassicGame = () => {
       setGameRound({ image, options })
 
       const savedGame: ClassicSavedGame = { winner, image, options }
-      loadSavedClassicGame({ key: KEY_SAVED_CLASSIC_GAME, object: savedGame })
-      localStorage.setItem('savedGame', JSON.stringify(savedGame))
+      storage.save(CLASSIC_GAME_CONFIG.STORAGE_KEYS.SAVED_GAME, savedGame)
 
       remainingCountriesRef.current = filterCountries
     },
