@@ -1,83 +1,76 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import fetchCountries from '../../../../services/api/fetchCountries'
-import { generateAnswerOptions } from '../model/generateAnswerOptions'
-import { pickWinner } from '../model/pickWinner'
-import { CLASSIC_MODE, type ClassicMode } from '../constants/modes'
-import type { QuestionType } from '../constants/question-type'
-import type { ClassicSavedGame } from '../types/storage'
+import { classicGameStorage } from '../../../../services/storage/classicGameStorage'
+import { createClassicRound } from '../model/createClassicRound'
+import { useCountries } from './useCountries'
+import { type QuestionType } from '../constants/question-type'
+import { type ClassicMode } from '../constants/modes'
 import type { GameRound } from '../types/round'
 import type { Country } from '../types/country'
-import { storage } from '../../../../utilities/storage'
-import { CLASSIC_GAME_CONFIG } from '../constants/config'
 
 const useClassicGame = () => {
-  const allCountriesRef = useRef<Country[]>([])
+  const { countries, isReady } = useCountries()
   const remainingCountriesRef = useRef<Country[]>([])
-  const [isReady, setIsReady] = useState(false)
 
   useEffect(() => {
-    const load = async () => {
-      const data = await fetchCountries()
-      allCountriesRef.current = data
-      remainingCountriesRef.current = data
-      setIsReady(true)
-    }
-    load()
-  }, [])
+    if (countries.length) remainingCountriesRef.current = countries
+  }, [countries])
 
   const [correctAnswer, setCorrectAnswer] = useState<string>('')
-  const [gameRound, setGameRound] = useState<GameRound>({
-    image: { svg: '', alt: '', png: '' },
-    options: [],
-  })
+  const [gameRound, setGameRound] = useState<GameRound>({ image: { svg: '', alt: '', png: '' }, options: [] })
+  const [questionType, setQuestionType] = useState<QuestionType>()
+  const [modeSelect, setModeSelect] = useState<ClassicMode>()
 
   const startClassicGame = useCallback(
     (type: QuestionType, mode: ClassicMode) => {
       if (!isReady) return
-      const baseCountries = remainingCountriesRef.current.length > 0 ? remainingCountriesRef.current : allCountriesRef.current
-      const saved = storage.load<ClassicSavedGame>(CLASSIC_GAME_CONFIG.STORAGE_KEYS.SAVED_GAME)
-
+      setQuestionType(type)
+      setModeSelect(mode)
+      const saved = classicGameStorage.load()
       if (saved) {
-        const { winner, image, options } = saved
-        setCorrectAnswer(winner)
-        setGameRound({ image: image, options })
+        setCorrectAnswer(saved.winner)
+        setGameRound({ image: saved.image, options: saved.options })
         return
       }
-
-      const { winner, image, filterCountries } = pickWinner({ type, remainingCountries: baseCountries })
-      const options = mode === CLASSIC_MODE.MULTIPLE_CHOICE ? generateAnswerOptions({ winner, type, allCountries: allCountriesRef.current }) : []
-
-      setCorrectAnswer(winner)
-      setGameRound({ image, options })
-
-      const savedGame: ClassicSavedGame = { winner, image, options }
-      storage.save(CLASSIC_GAME_CONFIG.STORAGE_KEYS.SAVED_GAME, savedGame)
-
-      remainingCountriesRef.current = filterCountries
+      const baseCountries = remainingCountriesRef.current.length > 0 ? remainingCountriesRef.current : countries
+      const round = createClassicRound({ type, mode, countries, remainingCountries: baseCountries })
+      setCorrectAnswer(round.winner)
+      setGameRound({ image: round.image, options: round.options })
+      remainingCountriesRef.current = round.newRemainingCountries
     },
-    [isReady],
+    [isReady, countries],
   )
 
-  // ===== Reset ===== //
+  const nextRound = () => {
+    // Remove
+    if (!questionType || !modeSelect) return
+    if (questionType && modeSelect) startClassicGame(questionType, modeSelect)
+  }
 
-  const resetGame = useCallback(() => {
-    remainingCountriesRef.current = allCountriesRef.current
-    setGameRound({ image: { svg: '', alt: '', png: '' }, options: [] })
-    setCorrectAnswer('')
-  }, [])
+  const restartGame = () => {
+    setIsGameOver(false)
+    remainingCountriesRef.current = countries
+    nextRound()
+  }
 
-  // ===== Checking ===== //
+  const [isGameOver, setIsGameOver] = useState<boolean>(false)
 
-  const userAnswer = ''
-  console.log(correctAnswer == userAnswer)
-
-  // ===== Return ===== //
+  const checkAnswer = (userAnswer: string) => {
+    const isCorrect = userAnswer === correctAnswer
+    classicGameStorage.remove()
+    if (isCorrect) {
+      nextRound()
+    } else {
+      setIsGameOver(true)
+    }
+  }
 
   return {
     startClassicGame,
-    resetGame,
     isReady,
     gameRound,
+    checkAnswer,
+    isGameOver,
+    restartGame,
   }
 }
 
