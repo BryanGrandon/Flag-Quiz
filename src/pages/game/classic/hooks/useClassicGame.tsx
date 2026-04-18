@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { classicGameStorage } from '../../../../services/storage/classicGameStorage'
+import { createClassicGameStorage } from '../../../../services/storage/classicGameStorage'
 import { createClassicRound } from '../model/createClassicRound'
 import { useCountries } from './useCountries'
-import { type QuestionType } from '../constants/question-type'
-import { type ClassicMode } from '../constants/modes'
+import { QUESTION_TYPES, type QuestionType } from '../constants/question-type'
+import { CLASSIC_MODE, type ClassicMode } from '../constants/modes'
 import type { GameRound } from '../types/round'
 import type { Country } from '../types/country'
 
@@ -17,15 +17,16 @@ const useClassicGame = () => {
 
   const [correctAnswer, setCorrectAnswer] = useState<string>('')
   const [gameRound, setGameRound] = useState<GameRound>({ image: { svg: '', alt: '', png: '' }, options: [] })
-  const [questionType, setQuestionType] = useState<QuestionType>()
-  const [modeSelect, setModeSelect] = useState<ClassicMode>()
+  const [questionType, setQuestionType] = useState<QuestionType>(QUESTION_TYPES.CAPITAL)
+  const [modeSelect, setModeSelect] = useState<ClassicMode>(CLASSIC_MODE.MULTIPLE_CHOICE)
 
   const startClassicGame = useCallback(
     (type: QuestionType, mode: ClassicMode) => {
       if (!isReady) return
       setQuestionType(type)
       setModeSelect(mode)
-      const saved = classicGameStorage.load()
+      const storage = createClassicGameStorage(type, mode)
+      const saved = storage.load()
       if (saved) {
         setCorrectAnswer(saved.winner)
         setGameRound({ image: saved.image, options: saved.options })
@@ -56,7 +57,9 @@ const useClassicGame = () => {
 
   const checkAnswer = (userAnswer: string) => {
     const isCorrect = userAnswer === correctAnswer
-    classicGameStorage.remove()
+    const storage = createClassicGameStorage(questionType, modeSelect)
+    storage.remove()
+
     if (isCorrect) {
       nextRound()
     } else {

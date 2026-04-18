@@ -1,4 +1,4 @@
-import { classicGameStorage } from '../../../../services/storage/classicGameStorage'
+import { createClassicGameStorage } from '../../../../services/storage/classicGameStorage'
 import { CLASSIC_GAME_CONFIG } from '../constants/config'
 import { CLASSIC_MODE, type ClassicMode } from '../constants/modes'
 import type { QuestionType } from '../constants/question-type'
@@ -31,6 +31,7 @@ export const createClassicRound = ({ type, mode, countries, remainingCountries }
   }
   const options = mode === CLASSIC_MODE.MULTIPLE_CHOICE ? Array.from(optionsSet).sort(() => Math.random() - 0.5) : []
 
-  classicGameStorage.save({ winner, image, options })
+  const storage = createClassicGameStorage(type, mode)
+  storage.save({ winner, image, options })
   return { winner, image, options, newRemainingCountries }
 }
