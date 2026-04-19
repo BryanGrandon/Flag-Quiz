@@ -1,58 +1,67 @@
 import useClassicGame from './hooks/useClassicGame'
 import { useSearchParams } from 'react-router-dom'
-
 import { useEffect } from 'react'
-import type { ClassicMode } from './constants/modes'
-import type { QuestionType } from './constants/question-type'
+import { CLASSIC_MODE } from './constants/modes'
+import { QUESTION_TYPES } from './constants/question-type'
+import { isValidOption } from '../../../utilities/validators'
+import useGameConfig from './hooks/useGameConfig'
 
 const PageGame = () => {
-  // PageClassicGame
   const [params] = useSearchParams()
 
-  const type = params.get('type') as QuestionType
-  const mode = params.get('mode') as ClassicMode
+  const typeParam = params.get('type')
+  const modeParam = params.get('mode')
 
-  const { startClassicGame, isReady, gameRound, checkAnswer, isGameOver, restartGame } = useClassicGame()
+  const type = isValidOption(QUESTION_TYPES, typeParam) ? typeParam : null
+  const mode = isValidOption(CLASSIC_MODE, modeParam) ? modeParam : null
 
+  const { runGame, startClassicGame, isReady, gameRound, checkAnswer, isGameOver, restartGame } = useClassicGame()
+  const { setGameConfig } = useGameConfig()
+
+  // ===== Init game =====
   useEffect(() => {
-    if (!type || !mode) return
-    if (!isReady) return
-    startClassicGame(type, mode)
-  }, [startClassicGame, type, mode, isReady])
+    if (!type || !mode || !isReady) return
+    setGameConfig({ type, mode })
+    startClassicGame({ type, mode })
+  }, [type, mode, isReady, startClassicGame, setGameConfig, runGame])
 
   return (
     <main>
-      {isGameOver ? (
-        <article className='fixed w-full h-full flex justify-center items-center'>
-          <section className='bg-gray-800 p-4 rounded-2xl shadow-lg shadow-gray-800 border border-gray-300'>
+      {isGameOver && (
+        <article className='fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-10'>
+          <section className='bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-300 text-center'>
             <h2 className='text-xl font-bold mb-2'>Game Over</h2>
             <p>points: 1000</p>
             <p>Time: 1.1 minutes</p>
-            <button className='mt-4 px-4 py-2 bg-white text-black rounded hover:scale-105 transition' onClick={restartGame}>
+
+            <button type='button' className='mt-4 px-4 py-2 bg-white text-black rounded hover:scale-105 transition' onClick={restartGame}>
               Try Again
             </button>
           </section>
         </article>
-      ) : null}
+      )}
 
-      <article className='min-h-lvh test flex items-center justify-center'>
-        <article>
-          <section className='test flex gap-8 p-8 rounded-xl'>
-            <section className='w-120 h-70 overflow-hidden test rounded-lg'>
-              <img src={gameRound.image?.svg} alt='' className='object-cover object-center w-full h-full' />
+      <article className='min-h-lvh flex items-center justify-center'>
+        <section className='flex gap-8 p-8 rounded-xl'>
+          <picture className='w-120 h-70 overflow-hidden rounded-lg'>{gameRound.image && <img src={gameRound.image.svg} alt='flag' className='object-cover object-center w-full h-full' />}</picture>
+
+          {gameRound.options.length > 0 && (
+            <section className='flex flex-col justify-evenly'>
+              <h2 className='text-xl mb-4'>Make your guess</h2>
+
+              {gameRound.options.map((option, index) => (
+                <button
+                  key={`${option}-${index}`}
+                  type='button'
+                  className='w-80 text-center text-lg bg-gray-600 rounded py-2 px-8 cursor-pointer transition hover:bg-primary hover:scale-105'
+                  onClick={() => checkAnswer(option)}
+                >
+                  {option}
+                </button>
+              ))}
             </section>
-            {gameRound.options.length > 0 ? (
-              <section className='test flex flex-col justify-evenly'>
-                <h2 className='font-basicaline text-xl'>Make your guess</h2>
-                {gameRound.options.map((el) => (
-                  <button className={`w-80 text-center text-lg bg-gray-600 rounded py-2 px-8 cursor-pointer select-none transition hover:bg-primary hover:scale-105`} onClick={() => checkAnswer(el)}>
-                    {el}
-                  </button>
-                ))}
-              </section>
-            ) : null}
-          </section>
-        </article>
+          )}
+        </section>
       </article>
     </main>
   )

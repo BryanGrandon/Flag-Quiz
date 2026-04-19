@@ -2,10 +2,12 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { createClassicGameStorage } from '../../../../services/storage/classicGameStorage'
 import { createClassicRound } from '../model/createClassicRound'
 import { useCountries } from './useCountries'
-import { QUESTION_TYPES, type QuestionType } from '../constants/question-type'
-import { CLASSIC_MODE, type ClassicMode } from '../constants/modes'
 import type { GameRound } from '../types/round'
 import type { Country } from '../types/country'
+import { CLASSIC_GAME_CONFIG } from '../constants/config'
+import useGameConfig from './useGameConfig'
+import type { QuestionType } from '../constants/question-type'
+import type { ClassicMode } from '../constants/modes'
 
 const useClassicGame = () => {
   const { countries, isReady } = useCountries()
@@ -17,14 +19,12 @@ const useClassicGame = () => {
 
   const [correctAnswer, setCorrectAnswer] = useState<string>('')
   const [gameRound, setGameRound] = useState<GameRound>({ image: { svg: '', alt: '', png: '' }, options: [] })
-  const [questionType, setQuestionType] = useState<QuestionType>(QUESTION_TYPES.CAPITAL)
-  const [modeSelect, setModeSelect] = useState<ClassicMode>(CLASSIC_MODE.MULTIPLE_CHOICE)
+  const { setGameConfig, gameMode, gameQuestionType } = useGameConfig()
 
   const startClassicGame = useCallback(
-    (type: QuestionType, mode: ClassicMode) => {
+    ({ type, mode }: { type: QuestionType; mode: ClassicMode }) => {
       if (!isReady) return
-      setQuestionType(type)
-      setModeSelect(mode)
+      setGameConfig({ type, mode })
       const storage = createClassicGameStorage(type, mode)
       const saved = storage.load()
       if (saved) {
@@ -38,31 +38,28 @@ const useClassicGame = () => {
       setGameRound({ image: round.image, options: round.options })
       remainingCountriesRef.current = round.newRemainingCountries
     },
-    [isReady, countries],
+    [isReady, countries, setGameConfig],
   )
-
-  const nextRound = () => {
-    // Remove
-    if (!questionType || !modeSelect) return
-    if (questionType && modeSelect) startClassicGame(questionType, modeSelect)
-  }
 
   const restartGame = () => {
     setIsGameOver(false)
-    remainingCountriesRef.current = countries
-    nextRound()
+    remainingCountriesRef.current = [...countries]
+    startClassicGame({ type: gameQuestionType, mode: gameMode })
   }
 
   const [isGameOver, setIsGameOver] = useState<boolean>(false)
 
   const checkAnswer = (userAnswer: string) => {
     const isCorrect = userAnswer === correctAnswer
-    const storage = createClassicGameStorage(questionType, modeSelect)
+
+    const storage = createClassicGameStorage(gameQuestionType, gameMode)
     storage.remove()
 
-    if (isCorrect) {
-      nextRound()
-    } else {
+    if (isCorrect) startClassicGame({ type: gameQuestionType, mode: gameMode })
+    else {
+      const correctAnswers: number = countries.length - remainingCountriesRef.current.length
+      const points = correctAnswers * CLASSIC_GAME_CONFIG.POINTS_PER_CORRECT
+      console.log(points)
       setIsGameOver(true)
     }
   }
