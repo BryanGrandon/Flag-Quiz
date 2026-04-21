@@ -51,7 +51,6 @@ const useClassicGame = () => {
 
   const checkAnswer = (userAnswer: string) => {
     const isCorrect = userAnswer === correctAnswer
-
     const storage = createClassicGameStorage(gameQuestionType, gameMode)
     storage.remove()
 
