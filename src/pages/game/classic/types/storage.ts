@@ -1,6 +1,6 @@
 import type { FlagImage } from './round'
 
-export interface ClassicSavedGame {
+export interface SavedClassicRound {
   winner: string
   image: FlagImage
   options: string[]

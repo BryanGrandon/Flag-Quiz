@@ -1,9 +1,10 @@
 import { useNavigate } from 'react-router-dom'
-import type { ClassicModes, ClassicType } from '../../game/classic/types/classic'
+import type { ClassicMode } from '../../game/classic/constants/modes'
+import type { QuestionType } from '../../game/classic/constants/question-type'
 
 type StartClassicGameParams = {
-  type: ClassicType
-  mode: ClassicModes
+  type: QuestionType
+  mode: ClassicMode
 }
 
 export const useStartClassicGame = () => {

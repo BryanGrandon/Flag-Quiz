@@ -11,6 +11,6 @@ export const CLASSIC_GAME_CONFIG = {
   // local storage
   STORAGE_KEYS: {
     BEST_SCORE: 'classic_best_score',
-    SAVED_GAME: 'classic_saved_game',
+    SAVED_CLASSIC_ROUND: 'classic_saved_game',
   },
 } as const
