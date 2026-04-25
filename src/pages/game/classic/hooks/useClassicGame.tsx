@@ -3,7 +3,6 @@ import { createClassicRound } from '../model/createClassicRound'
 import { useCountries } from './useCountries'
 import type { GameRound } from '../types/round'
 import type { Country } from '../types/country'
-import { CLASSIC_GAME_CONFIG } from '../constants/config'
 import type { QuestionType } from '../constants/question-type'
 import type { ClassicMode } from '../constants/modes'
 import { useClassicStorage } from './useGameStorage'
@@ -18,7 +17,7 @@ const useClassicGame = () => {
 
   const [correctAnswer, setCorrectAnswer] = useState<string>('')
   const [gameRound, setGameRound] = useState<GameRound>({ image: { svg: '', alt: '', png: '' }, options: [] })
-  const { roundGame, gameConfig, selectedMode, selectedType } = useClassicStorage({ base: 'ROUND' })
+  const { roundGame, gameConfig, selectedMode, selectedType } = useClassicStorage()
 
   const startClassicGame = useCallback(
     ({ type, mode }: { type: QuestionType; mode: ClassicMode }) => {
@@ -56,9 +55,6 @@ const useClassicGame = () => {
       roundGame.remove()
       startClassicGame({ type: selectedType, mode: selectedMode })
     } else {
-      const correctAnswers: number = countries.length - remainingCountriesRef.current.length
-      const points = correctAnswers * CLASSIC_GAME_CONFIG.POINTS_PER_CORRECT
-      console.log(points)
       setIsGameOver(true)
     }
   }

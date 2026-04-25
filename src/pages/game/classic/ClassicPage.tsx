@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import { CLASSIC_MODE } from './constants/modes'
 import { QUESTION_TYPES } from './constants/question-type'
 import { isValidOption } from '../../../utilities/validators'
-import useGameConfig from './hooks/useGameConfig'
+import { useClassicStreak } from './hooks/useClassicStreak'
 
 const PageGame = () => {
   const [params] = useSearchParams()
@@ -16,14 +16,13 @@ const PageGame = () => {
   const mode = isValidOption(CLASSIC_MODE, modeParam) ? modeParam : null
 
   const { startClassicGame, isReady, gameRound, checkAnswer, isGameOver, restartGame } = useClassicGame()
-  const { setGameConfig } = useGameConfig()
+  const { currentStreak, bestStreak, increaseStreak, resetStreak } = useClassicStreak()
 
   // ===== Init game =====
   useEffect(() => {
     if (!type || !mode || !isReady) return
-    setGameConfig({ type, mode })
     startClassicGame({ type, mode })
-  }, [type, mode, isReady, startClassicGame, setGameConfig])
+  }, [type, mode, isReady, startClassicGame])
 
   return (
     <>
@@ -31,11 +30,7 @@ const PageGame = () => {
         <article className='fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-10'>
           <section className='bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-300 text-center'>
             <h2 className='text-xl font-bold mb-2'>Game Over</h2>
-            {/* Use hook of the Score */}
-            <p>points: 1000</p>
-            {/* Create hook for time? */}
-            <p>Time: 1.1 minutes</p>
-
+            <p>Current Streak {currentStreak}</p>
             <button type='button' className='mt-4 px-4 py-2 bg-white text-black rounded hover:scale-105 transition' onClick={restartGame}>
               Try Again
             </button>
@@ -46,8 +41,10 @@ const PageGame = () => {
         <header className='test h-30'>
           {/* Create hook for Score */}
           <h2>Title</h2>
-          <p>More score: 5</p>
-          <p>Score: 2</p>
+          <p>Best Current: {bestStreak}</p>
+          <p>Current Streak: {currentStreak}</p>
+          <button onClick={increaseStreak}>Increment</button>
+          <button onClick={resetStreak}>Reset</button>
         </header>
 
         <article className='flex items-center justify-center'>
