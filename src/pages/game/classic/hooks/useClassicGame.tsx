@@ -46,6 +46,7 @@ const useClassicGame = () => {
     isGameOver,
     restartGame,
     streak,
+    correctAnswer,
   }
 }
 

@@ -14,7 +14,7 @@ const PageGame = () => {
   const type = isValidOption(QUESTION_TYPES, typeParam) ? typeParam : null
   const mode = isValidOption(CLASSIC_MODE, modeParam) ? modeParam : null
 
-  const { startClassicGame, isReady, gameRound, checkAnswer, isGameOver, restartGame, streak } = useClassicGame()
+  const { startClassicGame, isReady, gameRound, checkAnswer, isGameOver, restartGame, streak, correctAnswer } = useClassicGame()
 
   // ===== Init game =====
   useEffect(() => {
@@ -26,23 +26,28 @@ const PageGame = () => {
     <>
       {isGameOver && (
         <article className='fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-10'>
-          <section className='bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-300 text-center'>
-            <h2 className='text-xl font-bold mb-2'>Game Over</h2>
-            <p>Current Streak {streak.current}</p>
-            <button type='button' className='mt-4 px-4 py-2 bg-white text-black rounded hover:scale-105 transition' onClick={restartGame}>
+          <section className='flex flex-col gap-4 bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-300 text-center'>
+            <h2 className='font-basicaline text-2xl font-bold mb-2'>Game Over</h2>
+            <picture className='flex h-40 w-70 overflow-hidden rounded-lg'>
+              {gameRound.image && <img src={gameRound.image.svg} alt='flag' className='object-cover object-center w-full h-full' />}
+            </picture>
+            <p className=' text-lg font-semibold'>
+              Correct Answer: <span className='text-green-400'>{correctAnswer}</span>
+            </p>
+            <p className='px-4 py-2 border border-gray-400 rounded-lg'>Current Streak: {streak.current}</p>
+            <button type='button' className=' px-4 py-2 bg-white text-black rounded hover:scale-105 transition' onClick={restartGame}>
               Try Again
             </button>
           </section>
         </article>
       )}
       <main className='min-h-screen flex flex-col gap-10'>
-        <header className='test h-30'>
-          {/* Create hook for Score */}
-          <h2>Title</h2>
-          <p>Best Current: {streak.best}</p>
-          <p>Current Streak: {streak.current}</p>
-          <button onClick={streak.increase}>Increment</button>
-          <button onClick={streak.reset}>Reset</button>
+        <header className='test p-4 flex flex-col gap-4 items-center justify-center'>
+          <h2 className='text-4xl font-basicaline text-center font-bold'>Guess the {type}</h2>
+          <section className='flex flex-row gap-10 items-center justify-center'>
+            <p className='px-4 py-2 border border-gray-400 rounded-lg'>Best Current: {streak.best}</p>
+            <p className='px-4 py-2 border border-gray-400 rounded-lg'>Current Streak: {streak.current}</p>
+          </section>
         </header>
 
         <article className='flex items-center justify-center'>
