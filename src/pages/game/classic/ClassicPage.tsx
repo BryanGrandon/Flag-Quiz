@@ -4,19 +4,16 @@ import { useEffect } from 'react'
 import { CLASSIC_MODE } from './constants/modes'
 import { QUESTION_TYPES } from './constants/question-type'
 import { isValidOption } from '../../../utilities/validators'
+import { GameOver } from './components/GameOver'
 
 const PageGame = () => {
   const [params] = useSearchParams()
-
   const typeParam = params.get('type')
   const modeParam = params.get('mode')
-
   const type = isValidOption(QUESTION_TYPES, typeParam) ? typeParam : null
   const mode = isValidOption(CLASSIC_MODE, modeParam) ? modeParam : null
-
   const { startClassicGame, isReady, gameRound, checkAnswer, isGameOver, restartGame, streak, correctAnswer } = useClassicGame()
 
-  // ===== Init game =====
   useEffect(() => {
     if (!type || !mode || !isReady) return
     startClassicGame({ type, mode })
@@ -25,28 +22,28 @@ const PageGame = () => {
   return (
     <>
       {isGameOver && (
-        <article className='fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-10'>
-          <section className='flex flex-col gap-4 bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-300 text-center'>
-            <h2 className='font-basicaline text-2xl font-bold mb-2'>Game Over</h2>
-            <picture className='flex h-40 w-70 overflow-hidden rounded-lg'>
-              {gameRound.image && <img src={gameRound.image.svg} alt='flag' className='object-cover object-center w-full h-full' />}
-            </picture>
-            <p className=' text-lg font-semibold'>
-              Correct Answer: <span className='text-green-400'>{correctAnswer}</span>
-            </p>
-            <p className='px-4 py-2 border border-gray-400 rounded-lg'>Current Streak: {streak.current}</p>
-            <button type='button' className=' px-4 py-2 bg-white text-black rounded hover:scale-105 transition' onClick={restartGame}>
-              Try Again
-            </button>
-          </section>
-        </article>
+        <>
+          <GameOver image={gameRound.image} answer={correctAnswer} currentStreak={streak.current} onClickReset={restartGame} />
+        </>
       )}
       <main className='min-h-screen flex flex-col gap-10'>
-        <header className='test p-4 flex flex-col gap-4 items-center justify-center'>
-          <h2 className='text-4xl font-basicaline text-center font-bold'>Guess the {type}</h2>
-          <section className='flex flex-row gap-10 items-center justify-center'>
-            <p className='px-4 py-2 border border-gray-400 rounded-lg'>Best Current: {streak.best}</p>
-            <p className='px-4 py-2 border border-gray-400 rounded-lg'>Current Streak: {streak.current}</p>
+        <header className='p-4 flex flex-col gap-4 bg-gray-900/80 backdrop-blur-sm border-b border-gray-700'>
+          <section className='flex items-center justify-between'>
+            <button onClick={() => window.history.back()} className='px-3 py-1 text-sm border border-gray-500 rounded-md hover:bg-gray-800 transition cursor-pointer'>
+              ← Back
+            </button>
+            <span className='text-sm text-gray-400'>Mode: {type}</span>
+          </section>
+
+          <h2 className='text-3xl md:text-4xl font-bold text-center font-basicaline'>Guess the {type}</h2>
+
+          <section className='flex gap-6 justify-center'>
+            <p className='px-4 py-2 border border-gray-500 rounded-lg text-sm min-w-30 text-center'>
+              Best: <span className='font-semibold'>{streak.best}</span>
+            </p>
+            <p className='px-4 py-2 border border-gray-500 rounded-lg text-sm min-w-30 text-center'>
+              Streak: <span className='font-semibold'>{streak.current}</span>
+            </p>
           </section>
         </header>
 
