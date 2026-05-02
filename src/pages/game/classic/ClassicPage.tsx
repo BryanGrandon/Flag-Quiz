@@ -27,21 +27,21 @@ const PageGame = () => {
         </>
       )}
       <main className='min-h-screen flex flex-col gap-10'>
-        <header className='p-4 flex flex-col gap-4 bg-gray-900/80 backdrop-blur-sm border-b border-gray-700'>
-          <section className='flex items-center justify-between'>
+        <header className='p-4 flex flex-col gap-4 backdrop-blur-sm overlay border-b border-gray-700 bg-[url("https://static.vecteezy.com/system/resources/previews/030/470/821/non_2x/colorful-flags-of-the-world-background-from-many-flags-of-the-world-ai-generated-photo.jpg")]'>
+          <section className='flex items-center justify-between relative'>
             <button onClick={() => window.history.back()} className='px-3 py-1 text-sm border border-gray-500 rounded-md hover:bg-gray-800 transition cursor-pointer'>
               ← Back
             </button>
             <span className='text-sm text-gray-400'>Mode: {type}</span>
           </section>
 
-          <h2 className='text-3xl md:text-4xl font-bold text-center font-basicaline'>Guess the {type}</h2>
+          <h2 className='text-3xl md:text-4xl font-bold text-center font-basicaline relative'>Guess the {type}</h2>
 
-          <section className='flex gap-6 justify-center'>
-            <p className='px-4 py-2 border border-gray-500 rounded-lg text-sm min-w-30 text-center'>
+          <section className='flex gap-6 justify-center relative'>
+            <p className='px-4 py-2 border border-gray-500 rounded-lg text-sm min-w-30 text-center bg-gray-900/60'>
               Best: <span className='font-semibold'>{streak.best}</span>
             </p>
-            <p className='px-4 py-2 border border-gray-500 rounded-lg text-sm min-w-30 text-center'>
+            <p className='px-4 py-2 border border-gray-500 rounded-lg text-sm min-w-30 text-center bg-gray-900/60'>
               Streak: <span className='font-semibold'>{streak.current}</span>
             </p>
           </section>
