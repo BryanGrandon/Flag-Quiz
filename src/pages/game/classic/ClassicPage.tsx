@@ -3,12 +3,12 @@ import { useSearchParams } from 'react-router-dom'
 import { useEffect } from 'react'
 import { CLASSIC_MODE } from './constants/modes'
 import { QUESTION_TYPES } from './constants/question-type'
-import { isValidOption } from '../../../utilities/validators'
+import { isValidOption } from '../../../shared/utilities/validators'
 import { GameOver } from './components/GameOver'
 
 const PageGame = () => {
   const [params] = useSearchParams()
-  const typeParam = params.get('type')
+  const typeParam = params.get('category')
   const modeParam = params.get('mode')
   const type = isValidOption(QUESTION_TYPES, typeParam) ? typeParam : null
   const mode = isValidOption(CLASSIC_MODE, modeParam) ? modeParam : null

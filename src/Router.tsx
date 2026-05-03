@@ -26,15 +26,7 @@ const router = createHashRouter([
           {
             path: 'classic',
             lazy: async () => {
-              const Classic = await import('./pages/game/classic/ClassicPage')
-              return { Component: Classic.default }
-            },
-            hydrateFallbackElement: TheFallback('Loading Game'),
-          },
-          {
-            path: 'comparison',
-            lazy: async () => {
-              const Classic = await import('./pages/game/comparison/ComparisonPage')
+              const Classic = await import('./features/classicGame/ClassicGamePage')
               return { Component: Classic.default }
             },
             hydrateFallbackElement: TheFallback('Loading Game'),
