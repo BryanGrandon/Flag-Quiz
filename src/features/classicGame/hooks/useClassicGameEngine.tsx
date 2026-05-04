@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useClassicGameStorage } from './useClassicGameStorage'
 import { useClassicRoundManager } from './useClassicRoundManager'
 import { useCountriesPool } from './useCountriesPool'
@@ -9,27 +10,49 @@ export const useClassicGameEngine = () => {
   const { remainingCountries } = useCountriesPool(countries)
   const { getGameStorage } = useClassicGameStorage()
 
+  // Streak
+
+  const [streakManager, setStreakManager] = useState({
+    current: classicGame.streak?.current ?? 0,
+    best: classicGame.streak?.best ?? 0,
+  })
+
+  const increaseStreak = () => {
+    setStreakManager((prev) => {
+      const current = prev.current + 1
+      const best = Math.max(prev.best, current)
+      getGameStorage(configClassicGame).save({ streak: { current: current, best: best } })
+      return { current, best }
+    })
+  }
+
+  const resetStreak = () => {
+    setStreakManager((prev) => {
+      getGameStorage(configClassicGame).save({ streak: { current: 0, best: prev.best } })
+      return { ...prev, current: 0 }
+    })
+  }
+
+  // check answer,  restart game
+
   const nextRound = () => startClassicGame(configClassicGame)
 
   const handlerCorrectAnswer = () => {
     nextRound()
-    // TODO: increase streak
+    increaseStreak()
   }
 
   const restartGame = () => {
     remainingCountries.reset()
     getGameStorage(configClassicGame).remove(['winner', 'options', 'image']) // ????????????????
-    // TODO: reset current streak
+    resetStreak()
     nextRound()
   }
   const checkAnswer = ({ value }: { value: string }) => {
     const isCorrect = value === classicGame.winner
     getGameStorage(configClassicGame).remove(['winner', 'options', 'image'])
     if (isCorrect) handlerCorrectAnswer()
-    else {
-      console.log('sssd') // Check
-    }
   }
 
-  return { startClassicGame, classicGame, isLoading, checkAnswer, restartGame }
+  return { startClassicGame, classicGame, isLoading, checkAnswer, restartGame, streakManager }
 }

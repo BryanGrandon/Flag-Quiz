@@ -33,11 +33,17 @@ export const useClassicGameStorage = () => {
     const save = (data: Partial<GameStorage>) => {
       const current = load()
 
+      const streak = {
+        current: data.streak?.current ?? current?.streak?.current ?? 0,
+        best: Math.max(data.streak?.best ?? 0, current?.streak?.best ?? 0, data.streak?.current ?? 0),
+      }
+
       const updated: GameStorage = {
         config: {
           category,
           mode,
         },
+        streak,
         ...current,
         ...data,
       }
