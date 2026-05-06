@@ -5,6 +5,8 @@ import { GAME_MODES } from '../../shared/constants/game-modes'
 import { isValidOption } from '../../shared/utilities/validators'
 import { useClassicGameEngine } from './hooks/useClassicGameEngine'
 import Button from '../../shared/components/Button'
+import { ClassicGameHeader } from './components/ClassicGameHeader'
+import { GAME_CONFIG } from '../../shared/data/classicGameData'
 
 const ClassicGamePage = () => {
   const [params] = useSearchParams()
@@ -24,13 +26,9 @@ const ClassicGamePage = () => {
   const [selected, setSelected] = useState<string | null>(null)
   const [showResult, setShowResult] = useState(false)
 
-  const resetStates = () => {
+  const handleTryAgain = () => {
     setSelected(null)
     setShowResult(false)
-  }
-
-  const handleTryAgain = () => {
-    resetStates()
     restartGame()
   }
 
@@ -41,10 +39,11 @@ const ClassicGamePage = () => {
 
     setTimeout(() => {
       if (id === classicGame?.winner) {
-        resetStates()
+        setSelected(null)
+        setShowResult(false)
         checkAnswer({ value: id })
       }
-    }, 200)
+    }, 300)
   }
 
   const getButtonStyle = (element: string) => {
@@ -54,32 +53,15 @@ const ClassicGamePage = () => {
     return 'bg-gray-700 opacity-50'
   }
 
+  const style = category === GAME_CONFIG[0].category ? GAME_CONFIG[0].color : GAME_CONFIG[1].color
+
   return (
     <article className='min-h-screen bg-linear-to-br from-gray-900 to-black text-white p-6'>
-      <header>
-        <nav className='flex items-center justify-between mb-8'>
-          <Button title={'← Back'} onClick={() => window.history.back()} />
+      <ClassicGameHeader category={category ?? ''} mode={mode ?? ''} streakCurrent={streakManager.current} bestCurrent={streakManager.best} />
 
-          <section className='text-center'>
-            <h1 className='text-3xl font-bold'>Guess the {category}</h1>
-            <p className='text-gray-400 text-sm'>Look at the flag and choose the correct {category}</p>
-          </section>
-          <section className='text-sm text-gray-300'>
-            Mode: <span className='text-green-400'>{mode?.split('_').join(' ')}</span> {/* Capitalize the first letter of each word */}
-          </section>
-        </nav>
-        <section className='flex justify-center gap-6 mb-10'>
-          <p className='px-6 py-3 rounded-lg border border-green-400/60 bg-green-500/20'>
-            🏆 Best: <span className='font-bold'>{streakManager.best}</span>
-          </p>
-          <p className='px-6 py-3 rounded-lg border border-purple-400/60 bg-purple-500/20'>
-            🔥 Streak: <span className='font-bold'>{streakManager.current}</span>
-          </p>
-        </section>
-      </header>
-
-      <article className='flex flex-col gap-6 test'>
-        <article className='grid lg:grid-cols-2 items-center gap-8 mx-auto bg-blue-950/40 backdrop-blur-2xl  p-6 rounded-2xl shadow-lg border-2 border-blue-900'>
+      <article className='flex flex-col gap-6'>
+        <article className={`grid lg:grid-cols-2 items-center gap-8 mx-auto  bg-linear-to-r ${style.button} p-6 rounded-2xl shadow-lg border-2 border-blue-900`}>
+          {/* Border Gradient */}
           <picture className='max-w-100 lg:w-120 max-h-60 lg:h-70 overflow-hidden rounded-lg'>
             {classicGame.image && <img src={classicGame.image.svg} alt={classicGame.image.alt} className='object-cover object-center w-full h-full' />}
           </picture>
@@ -88,14 +70,12 @@ const ClassicGamePage = () => {
               <h2 className='text-xl font-semibold mb-4 border-b border-gray-700 pb-2'>Make your guess</h2>
               <section className='flex flex-col gap-4'>
                 {classicGame?.options?.map((option, index) => (
-                  <>
-                    <Button
-                      title={option}
-                      onClick={() => handleSelect(option)}
-                      className={`border transition ${getButtonStyle(option)}`}
-                      icon={<span className='w-6 h-6 flex items-center justify-center rounded-full border'>{String.fromCharCode(65 + index)}</span>}
-                    />
-                  </>
+                  <Button
+                    title={option}
+                    onClick={() => handleSelect(option)}
+                    className={`border ${getButtonStyle(option)}`}
+                    icon={<span className='w-6 h-6 flex items-center justify-center rounded-full border'>{String.fromCharCode(65 + index)}</span>}
+                  />
                 ))}
               </section>
             </section>

@@ -17,7 +17,10 @@ export const GAME_CONFIG = [
       src: 'https://svgowl.com/show/389190/flag.svg',
       alt: 'Country Flag Quiz',
     },
-    color: 'purple',
+    color: {
+      button: 'from-purple-500 to-pink-500',
+      active: 'bg-purple-500/20 border-purple-400',
+    },
   },
   {
     id: 2,
@@ -30,6 +33,9 @@ export const GAME_CONFIG = [
       src: 'https://svgowl.com/show/389259/landmark.svg',
       alt: 'Capital City Quiz',
     },
-    color: 'blue',
+    color: {
+      button: 'from-cyan-400 to-blue-500',
+      active: 'bg-blue-500/20 border-blue-400',
+    },
   },
 ] as const

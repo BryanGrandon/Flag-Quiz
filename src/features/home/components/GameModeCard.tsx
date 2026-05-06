@@ -4,6 +4,7 @@ import SectionHeader from './SectionHeader'
 import { useStartClassicGame } from '../hooks/useStartClassicGame'
 import type { GameCategory } from '../../../shared/constants/game-category'
 import { GAME_MODES, type GameModes } from '../../../shared/constants/game-modes'
+import Button from '../../../shared/components/Button'
 
 interface GameModeCardProps {
   title: string
@@ -14,25 +15,17 @@ interface GameModeCardProps {
   description: string
   howToPlay: string
   category: GameCategory
-  color: 'blue' | 'purple'
+  color: {
+    button: string
+    active: string
+  }
 }
 
 export const GameModeCard = ({ title, description, icon, color, howToPlay, category }: GameModeCardProps) => {
   const [selectedMode, setSelectedMode] = useState<GameModes>(GAME_MODES.MULTIPLE_CHOICE)
   const { startClassicGame } = useStartClassicGame()
 
-  const colorStyles = {
-    blue: {
-      button: 'from-cyan-400 to-blue-500',
-      active: 'bg-blue-500/20 border-blue-400',
-    },
-    purple: {
-      button: 'from-purple-500 to-pink-500',
-      active: 'bg-purple-500/20 border-purple-400',
-    },
-  }
-
-  const styles = colorStyles[color]
+  const styles = color
 
   return (
     <article className={`flex flex-col gap-4 justify-between relative rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-6 shadow-lg transition-all`}>
@@ -52,23 +45,20 @@ export const GameModeCard = ({ title, description, icon, color, howToPlay, categ
 
         <section className='flex gap-2'>
           {CLASSIC_MODES.map((mode) => (
-            <button
-              key={mode}
+            <Button
+              title={`${mode === GAME_MODES.MULTIPLE_CHOICE ? 'Multiple Choice' : 'Writing'}`}
               onClick={() => setSelectedMode(mode)}
-              className={`flex-1 px-4 py-2 rounded-lg border text-sm transition cursor-pointer ${selectedMode === mode ? `${styles.active} text-white` : 'border-white/10 text-gray-300 hover:bg-white/10'}`}
-            >
-              {mode === GAME_MODES.MULTIPLE_CHOICE ? 'Multiple Choice' : 'Writing'}
-            </button>
+              className={`w-full justify-center ${selectedMode === mode ? `${styles.active} text-white` : 'border-white/10 text-gray-300 hover:bg-white/10'}`}
+            />
           ))}
         </section>
       </section>
 
-      <button
+      <Button
+        title='Start Quiz'
         onClick={() => startClassicGame({ category, mode: selectedMode })}
-        className={`w-full py-3 rounded-xl font-medium text-white bg-linear-to-r ${styles.button} hover:opacity-90 transition cursor-pointer`}
-      >
-        Start Quiz →
-      </button>
+        className={`py-3 rounded-xl text-white font-medium justify-center bg-linear-to-r ${styles.button} hover:opacity-90`}
+      />
     </article>
   )
 }

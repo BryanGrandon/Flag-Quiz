@@ -33,8 +33,7 @@ export const useClassicGameEngine = () => {
     })
   }
 
-  // check answer,  restart game
-
+  // check answer, restart game
   const nextRound = () => startClassicGame(configClassicGame)
 
   const handlerCorrectAnswer = () => {
