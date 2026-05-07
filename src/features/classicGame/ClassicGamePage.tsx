@@ -8,6 +8,7 @@ import { useClassicGameEngine } from './hooks/useClassicGameEngine'
 import { useMultipleChoice } from './hooks/useMultipleChoice'
 import ClassicGameHeader from './components/ClassicGameHeader'
 import Button from '../../shared/components/Button'
+import { useWriting } from './hooks/useWriting'
 
 const ClassicGamePage = () => {
   const [params] = useSearchParams()
@@ -19,6 +20,7 @@ const ClassicGamePage = () => {
 
   const { startClassicGame, classicGame, isLoading, streakManager, checkAnswer, restartGame } = useClassicGameEngine()
   const { getButtonStyle, handleOptionSelect, handleTryAgain, isWrongAnswer } = useMultipleChoice({ winner: classicGame.winner ?? '', checkAnswer, restartGame })
+  const { setInputValue, inputWriting, isDisabled, IsWrongAnswerInput, submit, restartInput, getInputStyle } = useWriting({ winner: classicGame.winner ?? '', checkAnswer, restartGame })
 
   useEffect(() => {
     if (!category || !mode || isLoading) return
@@ -34,7 +36,6 @@ const ClassicGamePage = () => {
       <article className='flex flex-col gap-6'>
         <article className={`bg-linear-to-r ${style.button} p-0.5 rounded-2xl mx-auto`}>
           <article className={`grid lg:grid-cols-2 items-center gap-8 mx-auto bg-gray-900 p-6 rounded-2xl shadow-lg`}>
-            {/* Border Gradient */}
             <picture className='max-w-100 lg:w-120 max-h-60 lg:h-70 overflow-hidden rounded-lg'>
               {classicGame.image && <img src={classicGame.image.svg} alt={classicGame.image.alt} className='object-cover object-center w-full h-full' />}
             </picture>
@@ -56,19 +57,26 @@ const ClassicGamePage = () => {
               <section className='flex flex-col gap-4'>
                 <h2 className='text-xl font-semibold border-b border-gray-700 pb-2'>Write your answer</h2>
 
-                <form className='flex flex-col sm:flex-row gap-4' onSubmit={(e) => e.preventDefault()}>
+                <form
+                  className='flex flex-col sm:flex-row gap-4'
+                  onSubmit={(e) => {
+                    e.preventDefault()
+                    submit()
+                  }}
+                >
                   <input
                     type='text'
-                    // value={inputValue}
-                    // onChange={(e) => setInputValue(e.target.value)}
+                    value={inputWriting}
+                    onChange={(e) => setInputValue(e.target.value)}
                     placeholder='Type your answer...'
                     autoComplete='off'
-                    className='flex-1 px-4 py-3 rounded-xl bg-gray-800 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent transition-all'
+                    // className='flex-1 px-4 py-3 rounded-xl bg-gray-800 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent transition-all'
+                    className={`flex-1 px-4 py-3 rounded-xl bg-gray-800 border transition-all outline-none focus:ring-green-400 focus:border-transparent ${getInputStyle()}`}
                   />
 
                   <button
                     type='submit'
-                    // disabled={!inputValue.trim() || showResult}
+                    disabled={isDisabled}
                     className='px-6 py-3 rounded-xl bg-green-600 hover:bg-green-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium'
                   >
                     Submit
@@ -86,6 +94,14 @@ const ClassicGamePage = () => {
           <section className=' flex flex-col items-center gap-4'>
             <p className='text-red-400 font-medium'>❌ Wrong answer. Try again!</p>
             <Button title='Try again' onClick={handleTryAgain} className='bg-red-600 hover:bg-red-500 font-semibold' />
+          </section>
+        )}
+        {IsWrongAnswerInput && (
+          // Create a button to scroll back to the top of the page and start a new round
+
+          <section className=' flex flex-col items-center gap-4'>
+            <p className='text-red-400 font-medium'>❌ Wrong answer. Try again!</p>
+            <Button title='Try again' onClick={restartInput} className='bg-red-600 hover:bg-red-500 font-semibold' />
           </section>
         )}
       </article>

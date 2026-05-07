@@ -48,7 +48,7 @@ export const useClassicGameEngine = () => {
     nextRound()
   }
   const checkAnswer = ({ value }: { value: string }) => {
-    const isCorrect = value === classicGame.winner
+    const isCorrect = value === classicGame.winner?.toLowerCase()
     getGameStorage(configClassicGame).remove(['winner', 'options', 'image'])
     if (isCorrect) handlerCorrectAnswer()
   }
