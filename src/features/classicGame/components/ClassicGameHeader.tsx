@@ -7,7 +7,7 @@ type ClassicGameHeaderProps = {
   bestCurrent: number
 }
 
-export const ClassicGameHeader = ({ category, streakCurrent, bestCurrent, mode }: ClassicGameHeaderProps) => {
+const ClassicGameHeader = ({ category, streakCurrent, bestCurrent, mode }: ClassicGameHeaderProps) => {
   return (
     <header>
       <nav className='flex items-center justify-between mb-8'>
@@ -32,3 +32,5 @@ export const ClassicGameHeader = ({ category, streakCurrent, bestCurrent, mode }
     </header>
   )
 }
+
+export default ClassicGameHeader
