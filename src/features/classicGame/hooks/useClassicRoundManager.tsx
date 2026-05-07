@@ -6,35 +6,18 @@ import { createClassicRound } from '../model/createClassicRound'
 import { GAME_MODES, type GameModes } from '../../../shared/constants/game-modes'
 import { GAME_CATEGORIES, type GameCategory } from '../../../shared/constants/game-category'
 import { useClassicGameStorage } from './useClassicGameStorage'
+import type { ClassicGameProps } from '../types/ClassicGameProps'
 
 export const useClassicRoundManager = () => {
   const { data: countries, isLoading } = useCountriesQuery()
   const { remainingCountries } = useCountriesPool(countries)
   const gameStorage = useClassicGameStorage()
 
-  type ClassicGame = {
-    winner?: string
-    image?: {
-      svg: string
-      alt: string
-      png: string
-    }
-    options?: string[]
-    streak?: {
-      current: number
-      best: number
-    }
-    config?: {
-      category: GameCategory
-      mode: GameModes
-    }
-  }
-
   const [configClassicGame, setConfigClassicGame] = useState({
     category: GAME_CATEGORIES.COUNTRY as GameCategory,
     mode: GAME_MODES.MULTIPLE_CHOICE as GameModes,
   })
-  const [classicGame, setClassicGame] = useState<ClassicGame>(gameStorage.getGameStorage(configClassicGame).load() ?? {})
+  const [classicGame, setClassicGame] = useState<ClassicGameProps>(gameStorage.getGameStorage(configClassicGame).load() ?? {})
   const storageWinner = gameStorage.getGameStorage(configClassicGame).load()?.winner
 
   const startClassicGame = useCallback(

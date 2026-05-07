@@ -13,8 +13,6 @@ export const useMultipleChoice = ({ winner, checkAnswer, restartGame }: Multiple
   const [showResult, setShowResult] = useState(false)
   const [isWrongAnswer, setIsWrongAnswer] = useState(false)
 
-  console.log(winner)
-
   const resetState = useCallback(() => {
     setSelectedAnswer(null)
     setShowResult(false)
@@ -32,10 +30,11 @@ export const useMultipleChoice = ({ winner, checkAnswer, restartGame }: Multiple
       setIsWrongAnswer(!isCorrect)
 
       setTimeout(() => {
-        if (!isCorrect) return
-
+        if (isCorrect) {
+          console.log(isCorrect)
+          resetState()
+        }
         checkAnswer({ value: option })
-        resetState()
       }, RESULT_DELAY)
     },
     [checkAnswer, resetState, showResult, winner],

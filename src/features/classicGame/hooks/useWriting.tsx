@@ -9,7 +9,7 @@ type WritingProps = {
 export const useWriting = ({ winner, checkAnswer, restartGame }: WritingProps) => {
   const [isDisabled, setIsDisabled] = useState(false)
   const [inputWriting, setInputWriting] = useState('')
-  const [IsWrongAnswerInput, setIsWrongAnswerInput] = useState<boolean>(false)
+  const [isWrongAnswerInput, setIsWrongAnswerInput] = useState<boolean>(false)
 
   const setInputValue = (value: string) => {
     const cleanValue = value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '')
@@ -17,15 +17,14 @@ export const useWriting = ({ winner, checkAnswer, restartGame }: WritingProps) =
   }
 
   const submit = () => {
-    if (!inputWriting.trim()) return
     setIsDisabled(true)
-    const isCorrect = inputWriting === winner
+    const isCorrect = inputWriting.toLowerCase().trim() === winner.toLowerCase()
     setIsWrongAnswerInput(!isCorrect)
 
-    if (inputWriting === winner) {
+    checkAnswer({ value: inputWriting })
+    if (isCorrect) {
       setIsDisabled(false)
       setInputWriting('')
-      checkAnswer({ value: inputWriting.trim().toLowerCase() })
     }
   }
 
@@ -49,7 +48,7 @@ export const useWriting = ({ winner, checkAnswer, restartGame }: WritingProps) =
   }, [winner, inputWriting, isDisabled])
 
   return {
-    IsWrongAnswerInput,
+    isWrongAnswerInput,
     isDisabled,
     inputWriting,
     setInputValue,

@@ -43,12 +43,11 @@ export const useClassicGameEngine = () => {
 
   const restartGame = () => {
     remainingCountries.reset()
-    getGameStorage(configClassicGame).remove(['winner', 'options', 'image']) // ????????????????
-    resetStreak()
     nextRound()
+    resetStreak()
   }
   const checkAnswer = ({ value }: { value: string }) => {
-    const isCorrect = value === classicGame.winner?.toLowerCase()
+    const isCorrect = value.toLowerCase() === classicGame.winner?.toLowerCase()
     getGameStorage(configClassicGame).remove(['winner', 'options', 'image'])
     if (isCorrect) handlerCorrectAnswer()
   }
