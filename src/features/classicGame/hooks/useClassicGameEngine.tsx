@@ -6,11 +6,14 @@ import { useCountriesQuery } from './useCountriesQuery'
 
 export const useClassicGameEngine = () => {
   const { startClassicGame, classicGame, configClassicGame } = useClassicRoundManager()
-  const { isLoading, data: countries } = useCountriesQuery()
+  // Change name of the classicGame
+  const { data: countries } = useCountriesQuery()
   const { remainingCountries } = useCountriesPool(countries)
   const { getGameStorage } = useClassicGameStorage()
 
-  // Streak
+  const storage = getGameStorage(configClassicGame)
+
+  // ===== Streak Actions ===== //
 
   const [streakManager, setStreakManager] = useState({
     current: classicGame.streak?.current ?? 0,
@@ -21,36 +24,56 @@ export const useClassicGameEngine = () => {
     setStreakManager((prev) => {
       const current = prev.current + 1
       const best = Math.max(prev.best, current)
-      getGameStorage(configClassicGame).save({ streak: { current: current, best: best } })
+      storage.save({ streak: { current: current, best: best } })
       return { current, best }
     })
   }
 
   const resetStreak = () => {
     setStreakManager((prev) => {
-      getGameStorage(configClassicGame).save({ streak: { current: 0, best: prev.best } })
+      storage.save({ streak: { current: 0, best: prev.best } })
       return { ...prev, current: 0 }
     })
   }
 
-  // check answer, restart game
-  const nextRound = () => startClassicGame(configClassicGame)
-
-  const handlerCorrectAnswer = () => {
-    nextRound()
-    increaseStreak()
+  const streakActions = {
+    increase: increaseStreak,
+    reset: resetStreak,
   }
 
-  const restartGame = () => {
+  // ===== Game Actions ===== //
+
+  const gameActionNextRound = () => {
+    startClassicGame(configClassicGame)
+    streakActions.increase()
+  }
+
+  const gameActionRestart = () => {
     remainingCountries.reset()
-    nextRound()
-    resetStreak()
-  }
-  const checkAnswer = ({ value }: { value: string }) => {
-    const isCorrect = value.toLowerCase() === classicGame.winner?.toLowerCase()
-    getGameStorage(configClassicGame).remove(['winner', 'options', 'image'])
-    if (isCorrect) handlerCorrectAnswer()
+    startClassicGame(configClassicGame)
+    streakActions.reset()
   }
 
-  return { startClassicGame, classicGame, isLoading, checkAnswer, restartGame, streakManager }
+  const gameActions = {
+    nextRound: gameActionNextRound,
+    restart: gameActionRestart,
+  }
+
+  // ===== Storage Actions ===== //
+
+  const storageActions = {
+    reset() {
+      storage.remove(['winner', 'options', 'image'])
+    },
+  }
+
+  // ===== Validators ===== //
+
+  const validators = {
+    checkAnswer(value: string) {
+      return value.trim().toLowerCase() === classicGame.winner?.trim().toLowerCase()
+    },
+  }
+
+  return { startClassicGame, classicGame, streakManager, gameActions, storageActions, validators }
 }

@@ -1,26 +1,19 @@
 import Button from '../../../shared/components/Button'
 import { useMultipleChoice } from '../hooks/useMultipleChoice'
+import type { GameImage } from '../types/game-state'
+import type { GeneralActions } from '../types/general-actions'
 import WrongAnswerFeedback from './WarningTryAgain'
 
-type Props = {
-  winner: string
-  checkAnswer: ({ value }: { value: string }) => void
-  restartGame: () => void
-  image:
-    | {
-        svg: string
-        png: string
-        alt: string
-      }
-    | undefined
+type Props = GeneralActions & {
+  image: GameImage | undefined
   options: string[]
 }
 
-const MultipleChoiceMode = ({ winner, checkAnswer, restartGame, image, options }: Props) => {
+const MultipleChoiceMode = ({ image, options, gameActions, storageActions, validators }: Props) => {
   const { getButtonStyle, handleOptionSelect, handleTryAgain, isWrongAnswer } = useMultipleChoice({
-    winner: winner ?? '',
-    checkAnswer,
-    restartGame,
+    gameActions,
+    storageActions,
+    validators,
   })
 
   return (

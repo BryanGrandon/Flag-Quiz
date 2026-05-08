@@ -1,22 +1,19 @@
 import { useWriting } from '../hooks/useWriting'
+import type { GameImage } from '../types/game-state'
+import type { GeneralActions } from '../types/general-actions'
 import WrongAnswerFeedback from './WarningTryAgain'
 
-type Props = {
+type ModeWritingProps = GeneralActions & {
   winner: string
-  checkAnswer: ({ value }: { value: string }) => void
-  restartGame: () => void
-  image:
-    | {
-        svg: string
-        png: string
-        alt: string
-      }
-    | undefined
+  image: GameImage | undefined
 }
 
-const ModeWriting = ({ winner, checkAnswer, restartGame, image }: Props) => {
-  console.log(winner)
-  const { submit, inputWriting, setInputValue, isDisabled, getInputStyle, isWrongAnswerInput, restartInput } = useWriting({ winner: winner ?? '', checkAnswer, restartGame })
+const ModeWriting = ({ winner, image, validators, gameActions, storageActions }: ModeWritingProps) => {
+  const { submit, inputWriting, setInputValue, isDisabled, getInputStyle, isWrongAnswerInput, restartInput } = useWriting({
+    validators,
+    gameActions,
+    storageActions,
+  })
   return (
     <>
       <article className='bg-linear-to-r p-0.5 rounded-2xl mx-auto'>

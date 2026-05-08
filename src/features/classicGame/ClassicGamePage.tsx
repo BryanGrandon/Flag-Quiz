@@ -16,12 +16,12 @@ const ClassicGamePage = () => {
   const category = isValidOption(GAME_CATEGORIES, categoryParam) ? categoryParam : null
   const mode = isValidOption(GAME_MODES, modeParam) ? modeParam : null
 
-  const { startClassicGame, classicGame, isLoading, streakManager, checkAnswer, restartGame } = useClassicGameEngine()
+  const { startClassicGame, classicGame, streakManager, gameActions, storageActions, validators } = useClassicGameEngine()
 
   useEffect(() => {
-    if (!category || !mode || isLoading) return
+    if (!category || !mode) return
     startClassicGame({ category, mode })
-  }, [category, mode, isLoading, startClassicGame])
+  }, [category, mode, startClassicGame])
 
   // const style = category === GAME_CONFIG[0].category ? GAME_CONFIG[0].color : GAME_CONFIG[1].color
 
@@ -32,9 +32,9 @@ const ClassicGamePage = () => {
       <article className='flex flex-col gap-6'>
         {/* STYLE add for Modes // ⬆️ create function for getStyles */}
         {mode === GAME_MODES.MULTIPLE_CHOICE ? (
-          <ModeMultiChoice winner={classicGame.winner ?? ''} checkAnswer={checkAnswer} restartGame={restartGame} options={classicGame.options ?? []} image={classicGame.image} />
+          <ModeMultiChoice options={classicGame.options ?? []} image={classicGame.image} gameActions={gameActions} storageActions={storageActions} validators={validators} />
         ) : (
-          <ModeWriting winner={classicGame.winner ?? ''} checkAnswer={checkAnswer} restartGame={restartGame} image={classicGame.image} />
+          <ModeWriting winner={classicGame.winner ?? ''} image={classicGame.image} gameActions={gameActions} storageActions={storageActions} validators={validators} />
         )}
       </article>
 

@@ -1,14 +1,9 @@
 import { useCallback, useState } from 'react'
+import type { GeneralActions } from '../types/general-actions'
 
 const RESULT_DELAY = 700
 
-type MultipleChoiceProps = {
-  winner: string
-  checkAnswer: ({ value }: { value: string }) => void
-  restartGame: () => void
-}
-
-export const useMultipleChoice = ({ winner, checkAnswer, restartGame }: MultipleChoiceProps) => {
+export const useMultipleChoice = ({ validators, gameActions, storageActions }: GeneralActions) => {
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null)
   const [showResult, setShowResult] = useState(false)
   const [isWrongAnswer, setIsWrongAnswer] = useState(false)
@@ -23,36 +18,37 @@ export const useMultipleChoice = ({ winner, checkAnswer, restartGame }: Multiple
     (option: string) => {
       if (showResult) return
 
-      const isCorrect = option === winner
+      const isCorrect = validators.checkAnswer(option)
 
       setSelectedAnswer(option)
       setShowResult(true)
       setIsWrongAnswer(!isCorrect)
 
+      storageActions.reset()
+
       setTimeout(() => {
         if (isCorrect) {
-          console.log(isCorrect)
           resetState()
+          gameActions.nextRound()
         }
-        checkAnswer({ value: option })
       }, RESULT_DELAY)
     },
-    [checkAnswer, resetState, showResult, winner],
+    [resetState, showResult, validators, gameActions, storageActions],
   )
 
   const handleTryAgain = useCallback(() => {
     resetState()
-    restartGame()
-  }, [resetState, restartGame])
+    gameActions.restart()
+  }, [resetState, gameActions])
 
   const getButtonStyle = useCallback(
     (option: string) => {
       if (!showResult) return 'bg-gray-700 hover:bg-gray-600'
-      if (option === winner) return 'bg-green-600 border-green-400 scale-105'
+      if (validators.checkAnswer(option)) return 'bg-green-600 border-green-400 scale-102'
       if (option === selectedAnswer) return 'bg-red-600 border-red-400'
       return 'bg-gray-700 opacity-40'
     },
-    [winner, selectedAnswer, showResult],
+    [selectedAnswer, showResult, validators],
   )
 
   return {
