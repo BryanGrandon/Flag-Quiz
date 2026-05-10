@@ -2,6 +2,7 @@ import Button from '../../../shared/components/Button'
 import { useMultipleChoice } from '../hooks/useMultipleChoice'
 import type { GameImage } from '../types/game-state'
 import type { GeneralActions } from '../types/general-actions'
+import GuessImage from './GuessImage'
 import WrongAnswerFeedback from './WarningTryAgain'
 
 type Props = GeneralActions & {
@@ -20,17 +21,13 @@ const MultipleChoiceMode = ({ image, options, gameActions, storageActions, valid
     <>
       <article className='bg-linear-to-r p-0.5 rounded-2xl mx-auto'>
         <section className='grid lg:grid-cols-2 items-center gap-8 bg-gray-900 p-6 rounded-2xl shadow-lg'>
-          <picture className='w-80 lg:w-120 h-40 lg:h-70 overflow-hidden rounded-xl mx-auto'>
-            {image && <img src={image.svg} alt={image.alt} className='object-cover object-center w-full h-full' />}
-          </picture>
-
+          {image && <GuessImage image={{ svg: image.svg, alt: image.alt }} />}
           <section>
             <h2 className='text-xl font-semibold mb-4 border-b border-gray-700 pb-2'>Make your guess</h2>
-
             <section className='flex flex-col gap-4'>
               {options?.map((option, index) => (
                 <Button
-                  key={option}
+                  key={index}
                   title={option}
                   onClick={() => handleOptionSelect(option)}
                   className={`border ${getButtonStyle(option)}`}

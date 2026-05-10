@@ -26,10 +26,10 @@ const ClassicGamePage = () => {
   // const style = category === GAME_CONFIG[0].category ? GAME_CONFIG[0].color : GAME_CONFIG[1].color
 
   return (
-    <article className='min-h-screen bg-linear-to-br from-gray-900 to-black text-white p-6'>
+    <article className='min-h-screen bg-linear-to-br from-gray-900 to-black text-white'>
       <ClassicGameHeader category={category ?? ''} mode={mode ?? ''} streakCurrent={streakManager.current} bestCurrent={streakManager.best} />
 
-      <article className='flex flex-col gap-6'>
+      <article className='flex flex-col gap-6 px-6'>
         {/* STYLE add for Modes // ⬆️ create function for getStyles */}
         {mode === GAME_MODES.MULTIPLE_CHOICE ? (
           <ModeMultiChoice options={classicGame.options ?? []} image={classicGame.image} gameActions={gameActions} storageActions={storageActions} validators={validators} />

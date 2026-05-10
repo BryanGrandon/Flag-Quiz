@@ -5,6 +5,7 @@ import { useStartClassicGame } from '../hooks/useStartClassicGame'
 import type { GameCategory } from '../../../shared/constants/game-category'
 import { GAME_MODES, type GameModes } from '../../../shared/constants/game-modes'
 import Button from '../../../shared/components/Button'
+import { formatMode } from '../../../shared/utilities/formatMode'
 
 interface GameModeCardProps {
   title: string
@@ -22,7 +23,7 @@ interface GameModeCardProps {
 }
 
 export const GameModeCard = ({ title, description, icon, color, howToPlay, category }: GameModeCardProps) => {
-  const [selectedMode, setSelectedMode] = useState<GameModes>(GAME_MODES.MULTIPLE_CHOICE)
+  const [selectedMode, setSelectedMode] = useState<GameModes>(GAME_MODES.MULTIPLE_CHOICE) // Create Storage for save MODE and load
   const { startClassicGame } = useStartClassicGame()
 
   const styles = color
@@ -33,20 +34,16 @@ export const GameModeCard = ({ title, description, icon, color, howToPlay, categ
         <img src={icon.src} alt={icon.alt} className={`p-3 rounded-xl bg-linear-to-r ${styles.button}`} />
         <h3 className='text-xl font-semibold text-white'>{title}</h3>
       </header>
-
       <p className='text-sm text-gray-300'>{description}</p>
-
       <SectionHeader title='How to play' />
-
       <p className='text-gray-300'>{howToPlay}</p>
-
       <section className='flex flex-col gap-4'>
         <SectionHeader title='Game Options' />
-
         <section className='flex gap-2'>
-          {CLASSIC_MODES.map((mode) => (
+          {CLASSIC_MODES.map((mode, index) => (
             <Button
-              title={`${mode === GAME_MODES.MULTIPLE_CHOICE ? 'Multiple Choice' : 'Writing'}`}
+              key={index}
+              title={formatMode(mode)}
               onClick={() => setSelectedMode(mode)}
               className={`w-full justify-center ${selectedMode === mode ? `${styles.active} text-white` : 'border-white/10 text-gray-300 hover:bg-white/10'}`}
             />

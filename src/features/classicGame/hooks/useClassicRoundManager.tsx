@@ -19,8 +19,8 @@ export const useClassicRoundManager = () => {
   }
 
   const defaultValue = {
-    category: 'capital',
-    mode: 'multi_choice',
+    category: '',
+    mode: '',
   }
 
   const [configClassicGame, setConfigClassicGame] = useState<ConfigClassicGameProps>(defaultValue as ConfigClassicGameProps)
