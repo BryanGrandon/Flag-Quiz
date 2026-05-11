@@ -7,9 +7,10 @@ import WrongAnswerFeedback from './WarningTryAgain'
 type ModeWritingProps = GeneralActions & {
   winner: string
   image: GameImage | undefined
+  color: string
 }
 
-const ModeWriting = ({ winner, image, validators, gameActions, storageActions }: ModeWritingProps) => {
+const ModeWriting = ({ winner, image, validators, gameActions, storageActions, color }: ModeWritingProps) => {
   const { submit, inputWriting, setInputValue, isDisabled, getInputStyle, isWrongAnswerInput, restartInput } = useWriting({
     validators,
     gameActions,
@@ -17,7 +18,7 @@ const ModeWriting = ({ winner, image, validators, gameActions, storageActions }:
   })
   return (
     <>
-      <article className='bg-linear-to-r p-0.5 rounded-2xl mx-auto'>
+      <article className={`bg-linear-to-r p-0.5 rounded-2xl mx-auto ${color}`}>
         <section className='grid lg:grid-cols-2 items-center gap-8 bg-gray-900 p-6 rounded-2xl shadow-lg'>
           {image && <GuessImage image={{ svg: image.svg, alt: image.alt }} />}
 

@@ -7,6 +7,7 @@ import { useClassicGameEngine } from './hooks/useClassicGameEngine'
 import ClassicGameHeader from './components/ClassicGameHeader'
 import ModeMultiChoice from './components/ModeMultiChoice'
 import ModeWriting from './components/ModeWriting'
+import { getStyle } from './utilities/getStyles'
 
 const ClassicGamePage = () => {
   const [params] = useSearchParams()
@@ -23,18 +24,17 @@ const ClassicGamePage = () => {
     startClassicGame({ category, mode })
   }, [category, mode, startClassicGame])
 
-  // const style = category === GAME_CONFIG[0].category ? GAME_CONFIG[0].color : GAME_CONFIG[1].color
+  const style = category ? getStyle(category) : ''
 
   return (
     <article className='min-h-screen bg-linear-to-br from-gray-900 to-black text-white'>
       <ClassicGameHeader category={category ?? ''} mode={mode ?? ''} streakCurrent={streakManager.current} bestCurrent={streakManager.best} />
 
       <article className='flex flex-col gap-6 px-6'>
-        {/* STYLE add for Modes // ⬆️ create function for getStyles */}
         {mode === GAME_MODES.MULTIPLE_CHOICE ? (
-          <ModeMultiChoice options={classicGame.options ?? []} image={classicGame.image} gameActions={gameActions} storageActions={storageActions} validators={validators} />
+          <ModeMultiChoice options={classicGame.options ?? []} image={classicGame.image} gameActions={gameActions} storageActions={storageActions} validators={validators} color={style} />
         ) : (
-          <ModeWriting winner={classicGame.winner ?? ''} image={classicGame.image} gameActions={gameActions} storageActions={storageActions} validators={validators} />
+          <ModeWriting winner={classicGame.winner ?? ''} image={classicGame.image} gameActions={gameActions} storageActions={storageActions} validators={validators} color={style} />
         )}
       </article>
 

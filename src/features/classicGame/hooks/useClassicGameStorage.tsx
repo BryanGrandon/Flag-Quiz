@@ -1,5 +1,6 @@
 import type { GameCategory } from '../../../shared/constants/game-category'
 import type { GameModes } from '../../../shared/constants/game-modes'
+import { dynamicStorageKey } from '../../../shared/utilities/dynamicStorageKey'
 import { storage } from '../../../shared/utilities/storage'
 
 type GameStorage = {
@@ -24,7 +25,7 @@ export const useClassicGameStorage = () => {
   const BASE_KEY = 'classicGame'
 
   const getGameStorage = ({ category, mode }: { category: GameCategory; mode: GameModes }) => {
-    const storageKey = `${BASE_KEY}:${category}:${mode}`
+    const storageKey = dynamicStorageKey({ base: BASE_KEY, dynamic: [category, mode] })
 
     const load = (): GameStorage | null => {
       return storage.load<GameStorage>(storageKey) ?? null

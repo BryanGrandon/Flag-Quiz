@@ -8,9 +8,10 @@ import WrongAnswerFeedback from './WarningTryAgain'
 type Props = GeneralActions & {
   image: GameImage | undefined
   options: string[]
+  color: string
 }
 
-const MultipleChoiceMode = ({ image, options, gameActions, storageActions, validators }: Props) => {
+const MultipleChoiceMode = ({ image, options, gameActions, storageActions, validators, color }: Props) => {
   const { getButtonStyle, handleOptionSelect, handleTryAgain, isWrongAnswer } = useMultipleChoice({
     gameActions,
     storageActions,
@@ -19,7 +20,7 @@ const MultipleChoiceMode = ({ image, options, gameActions, storageActions, valid
 
   return (
     <>
-      <article className='bg-linear-to-r p-0.5 rounded-2xl mx-auto'>
+      <article className={`bg-linear-to-r p-0.5 rounded-2xl mx-auto ${color}`}>
         <section className='grid lg:grid-cols-2 items-center gap-8 bg-gray-900 p-6 rounded-2xl shadow-lg'>
           {image && <GuessImage image={{ svg: image.svg, alt: image.alt }} />}
           <section>

@@ -19,7 +19,7 @@ export const GAME_CONFIG = [
     },
     color: {
       button: 'from-purple-500 to-pink-500',
-      active: 'bg-purple-500/20 border-purple-400',
+      active: 'bg-purple-500/30 border-purple-400',
     },
   },
   {
@@ -35,7 +35,7 @@ export const GAME_CONFIG = [
     },
     color: {
       button: 'from-cyan-400 to-blue-500',
-      active: 'bg-blue-500/20 border-blue-400',
+      active: 'bg-blue-500/30 border-blue-400',
     },
   },
 ] as const
