@@ -17,7 +17,7 @@ const ClassicGamePage = () => {
   const category = isValidOption(GAME_CATEGORIES, categoryParam) ? categoryParam : null
   const mode = isValidOption(GAME_MODES, modeParam) ? modeParam : null
 
-  const { startClassicGame, classicGame, streakManager, gameActions, storageActions, validators } = useClassicGameEngine()
+  const { startClassicGame, classicGame, gameActions, storageActions, validators } = useClassicGameEngine()
 
   useEffect(() => {
     if (!category || !mode) return
@@ -27,8 +27,8 @@ const ClassicGamePage = () => {
   const style = category ? getStyle(category) : ''
 
   return (
-    <article className='min-h-screen bg-linear-to-br from-gray-900 to-black text-white'>
-      <ClassicGameHeader category={category ?? ''} mode={mode ?? ''} streakCurrent={streakManager.current} bestCurrent={streakManager.best} />
+    <article className='min-h-screen'>
+      <ClassicGameHeader category={category ?? ''} mode={mode ?? ''} streakCurrent={classicGame?.streak?.current ?? 0} bestCurrent={classicGame?.streak?.best ?? 0} />
 
       <article className='flex flex-col gap-6 px-6'>
         {mode === GAME_MODES.MULTIPLE_CHOICE ? (

@@ -39,6 +39,7 @@ export const useClassicRoundManager = () => {
       if (saved?.winner && saved?.image && saved?.options) {
         setClassicGame((prev) => ({
           ...prev,
+          streak: saved.streak,
           winner: saved.winner,
           image: saved.image,
           options: saved.options,
@@ -58,6 +59,7 @@ export const useClassicRoundManager = () => {
       remainingCountries.set(round.newRemainingCountries)
 
       storage.save({
+        streak: saved?.streak,
         winner: round.winner,
         image: round.image,
         options: round.options,
@@ -65,6 +67,7 @@ export const useClassicRoundManager = () => {
 
       setClassicGame((prev) => ({
         ...prev,
+        streak: saved?.streak,
         winner: round.winner,
         image: round.image,
         options: round.options,

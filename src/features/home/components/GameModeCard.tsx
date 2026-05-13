@@ -61,7 +61,7 @@ export const GameModeCard = ({ title, description, icon, color, howToPlay, categ
         <p className='text-gray-300'>{howToPlay}</p>
         <section className='flex flex-col gap-4'>
           <SectionHeader title='Game Options' />
-          <section className='flex gap-2'>
+          <section className='grid grid-cols-1 sm:grid-cols-2 gap-2'>
             {CLASSIC_MODES.map((mode, index) => (
               <Button
                 key={index}

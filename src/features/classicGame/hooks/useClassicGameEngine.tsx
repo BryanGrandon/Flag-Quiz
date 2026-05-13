@@ -15,24 +15,31 @@ export const useClassicGameEngine = () => {
 
   // ===== Streak Actions ===== //
 
+  const savedStreak = storage.load()?.streak
+
   const [streakManager, setStreakManager] = useState({
-    current: classicGame.streak?.current ?? 0,
-    best: classicGame.streak?.best ?? 0,
+    current: savedStreak?.current ?? 0,
+    best: savedStreak?.best ?? 0,
   })
 
   const increaseStreak = () => {
     setStreakManager((prev) => {
       const current = prev.current + 1
       const best = Math.max(prev.best, current)
-      storage.save({ streak: { current: current, best: best } })
-      return { current, best }
+      const streak = { current, best }
+      storage.save({ streak })
+      return streak
     })
   }
 
   const resetStreak = () => {
     setStreakManager((prev) => {
-      storage.save({ streak: { current: 0, best: prev.best } })
-      return { ...prev, current: 0 }
+      const streak = {
+        current: 0,
+        best: prev.best,
+      }
+      storage.save({ streak })
+      return streak
     })
   }
 
@@ -75,5 +82,5 @@ export const useClassicGameEngine = () => {
     },
   }
 
-  return { startClassicGame, classicGame, streakManager, gameActions, storageActions, validators }
+  return { startClassicGame, classicGame, gameActions, storageActions, validators, streakManager }
 }

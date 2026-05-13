@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import type { GeneralActions } from '../types/general-actions'
 
-const RESULT_DELAY = 700
+const RESULT_DELAY = 800
 
 export const useMultipleChoice = ({ validators, gameActions, storageActions }: GeneralActions) => {
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null)
@@ -13,6 +13,10 @@ export const useMultipleChoice = ({ validators, gameActions, storageActions }: G
     setShowResult(false)
     setIsWrongAnswer(false)
   }, [])
+  const handleTryAgain = useCallback(() => {
+    resetState()
+    gameActions.restart()
+  }, [resetState, gameActions])
 
   const handleOptionSelect = useCallback(
     (option: string) => {
@@ -30,16 +34,13 @@ export const useMultipleChoice = ({ validators, gameActions, storageActions }: G
         if (isCorrect) {
           resetState()
           gameActions.nextRound()
+        } else {
+          handleTryAgain()
         }
       }, RESULT_DELAY)
     },
-    [resetState, showResult, validators, gameActions, storageActions],
+    [resetState, showResult, validators, gameActions, storageActions, handleTryAgain],
   )
-
-  const handleTryAgain = useCallback(() => {
-    resetState()
-    gameActions.restart()
-  }, [resetState, gameActions])
 
   const getButtonStyle = useCallback(
     (option: string) => {
