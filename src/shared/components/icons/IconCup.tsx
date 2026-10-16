@@ -19,8 +19,11 @@ const IconCup = ({ color = 'white', height = '1.5rem' }: Icon) => {
           stroke={color}
         ></path>
         <path d='M12 17V19' stroke={color}></path>
-        <path d='M15.5 22H8.5L8.83922 20.3039C8.93271 19.8365 9.34312 19.5 9.8198 19.5H14.1802C14.6569 19.5 15.0673 19.8365 15.1608 20.3039L15.5 22Z' stroke={color}></path>{' '}
-        <path d='M18 22H6' stroke={color} stroke-width='1.5' stroke-linecap='round'></path>
+        <path
+          d='M15.5 22H8.5L8.83922 20.3039C8.93271 19.8365 9.34312 19.5 9.8198 19.5H14.1802C14.6569 19.5 15.0673 19.8365 15.1608 20.3039L15.5 22Z'
+          stroke={color}
+        ></path>{' '}
+        <path d='M18 22H6' stroke={color} strokeWidth='1.5' strokeLinecap='round'></path>
       </g>
     </svg>
   )

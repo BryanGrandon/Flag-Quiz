@@ -1,12 +1,21 @@
 import { GAME_CATEGORIES, type GameCategory } from '../../../shared/constants/game-category'
-import type { Country } from '../types/country'
+// import type { Country } from '../types/country'
 
-export const getAnswerValue = (item: Country, type: GameCategory) => {
+type Countries = {
+  name: string
+  capital: string
+  flags: {
+    png: string
+    svg: string
+  }
+}
+
+export const getAnswerValue = (item: Countries, type: GameCategory) => {
   if (!item) return ''
 
   switch (type) {
     case GAME_CATEGORIES.COUNTRY:
-      return item.name.common ?? ''
+      return item.name ?? ''
 
     case GAME_CATEGORIES.CAPITAL:
       return item.capital?.[0] ?? ''

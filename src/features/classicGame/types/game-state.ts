@@ -3,7 +3,6 @@ import type { GameModes } from '../../../shared/constants/game-modes'
 
 export type GameImage = {
   svg: string
-  alt: string
   png: string
 }
 

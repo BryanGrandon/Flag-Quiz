@@ -13,6 +13,7 @@ export const useMultipleChoice = ({ validators, gameActions, storageActions }: G
     setShowResult(false)
     setIsWrongAnswer(false)
   }, [])
+
   const handleTryAgain = useCallback(() => {
     resetState()
     gameActions.restart()

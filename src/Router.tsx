@@ -31,6 +31,14 @@ const router = createHashRouter([
             },
             hydrateFallbackElement: TheFallback('Loading Game'),
           },
+          {
+            path: 'multiple-choice',
+            lazy: async () => {
+              const MultipleChoice = await import('./features/game/MultipleChoicePage')
+              return { Component: MultipleChoice.default }
+            },
+            hydrateFallbackElement: TheFallback('Loading Game'),
+          },
         ],
       },
     ],

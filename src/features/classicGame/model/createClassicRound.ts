@@ -1,13 +1,22 @@
 import type { GameCategory } from '../../../shared/constants/game-category'
 import { GAME_MODES, type GameModes } from '../../../shared/constants/game-modes'
-import type { Country } from '../types/country'
+// import type { Country } from '../types/country'
 import { getAnswerValue } from './getAnswerValue'
+
+type Countries = {
+  name: string
+  capital: string
+  flags: {
+    png: string
+    svg: string
+  }
+}
 
 type CreateClassicRound = {
   category: GameCategory
   mode: GameModes
-  countries: Country[]
-  remainingCountries: Country[]
+  countries: Countries[]
+  remainingCountries: Countries[]
 }
 
 export const createClassicRound = ({ category, mode, countries, remainingCountries }: CreateClassicRound) => {
@@ -16,9 +25,10 @@ export const createClassicRound = ({ category, mode, countries, remainingCountri
   const image = {
     png: randomItem?.flags?.png,
     svg: randomItem?.flags?.svg,
-    alt: randomItem?.flags?.alt,
   }
-  const newRemainingCountries = remainingCountries.filter((item: Country) => getAnswerValue(item, category) !== winner)
+  const newRemainingCountries = remainingCountries.filter(
+    (item: Countries) => getAnswerValue(item, category) !== winner,
+  )
 
   const optionsSet = new Set<string>([winner])
   while (optionsSet.size < 4) {

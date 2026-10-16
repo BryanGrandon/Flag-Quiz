@@ -7,7 +7,6 @@ type GameStorage = {
   winner?: string
   image?: {
     svg: string
-    alt: string
     png: string
   }
   options?: string[]

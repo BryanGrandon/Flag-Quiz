@@ -23,8 +23,12 @@ export const useClassicRoundManager = () => {
     mode: '',
   }
 
-  const [configClassicGame, setConfigClassicGame] = useState<ConfigClassicGameProps>(defaultValue as ConfigClassicGameProps)
-  const [classicGame, setClassicGame] = useState<GameState>(configClassicGame ? (gameStorage.getGameStorage(configClassicGame).load() ?? {}) : {})
+  const [configClassicGame, setConfigClassicGame] = useState<ConfigClassicGameProps>(
+    defaultValue as ConfigClassicGameProps,
+  )
+  const [classicGame, setClassicGame] = useState<GameState>(
+    configClassicGame ? (gameStorage.getGameStorage(configClassicGame).load() ?? {}) : {},
+  )
   const storageWinner = configClassicGame ? gameStorage.getGameStorage(configClassicGame).load()?.winner : ''
 
   const startClassicGame = useCallback(
