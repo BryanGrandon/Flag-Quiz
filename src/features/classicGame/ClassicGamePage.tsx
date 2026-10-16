@@ -28,13 +28,32 @@ const ClassicGamePage = () => {
 
   return (
     <article className='min-h-screen'>
-      <ClassicGameHeader category={category ?? ''} mode={mode ?? ''} streakCurrent={classicGame?.streak?.current ?? 0} bestCurrent={classicGame?.streak?.best ?? 0} />
+      <ClassicGameHeader
+        category={category ?? ''}
+        mode={mode ?? ''}
+        streakCurrent={classicGame?.streak?.current ?? 0}
+        bestCurrent={classicGame?.streak?.best ?? 0}
+      />
 
       <article className='flex flex-col gap-6 px-6'>
         {mode === GAME_MODES.MULTIPLE_CHOICE ? (
-          <ModeMultiChoice options={classicGame.options ?? []} image={classicGame.image} gameActions={gameActions} storageActions={storageActions} validators={validators} color={style} />
+          <ModeMultiChoice
+            options={classicGame.options ?? []}
+            image={classicGame.image}
+            gameActions={gameActions}
+            storageActions={storageActions}
+            validators={validators}
+            color={style}
+          />
         ) : (
-          <ModeWriting winner={classicGame.winner ?? ''} image={classicGame.image} gameActions={gameActions} storageActions={storageActions} validators={validators} color={style} />
+          <ModeWriting
+            winner={classicGame.winner ?? ''}
+            image={classicGame.image}
+            gameActions={gameActions}
+            storageActions={storageActions}
+            validators={validators}
+            color={style}
+          />
         )}
       </article>
 
