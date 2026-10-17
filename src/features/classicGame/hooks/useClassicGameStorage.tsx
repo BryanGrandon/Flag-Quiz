@@ -21,10 +21,8 @@ type GameStorage = {
 }
 
 export const useClassicGameStorage = () => {
-  const BASE_KEY = 'classicGame'
-
   const getGameStorage = ({ category, mode }: { category: GameCategory; mode: GameModes }) => {
-    const storageKey = dynamicStorageKey({ base: BASE_KEY, dynamic: [category, mode] })
+    const storageKey = dynamicStorageKey({ base: 'storage', dynamic: `${category}-${mode}` })
 
     const load = (): GameStorage | null => {
       return storage.load<GameStorage>(storageKey) ?? null

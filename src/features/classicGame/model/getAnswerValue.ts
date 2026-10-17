@@ -18,7 +18,7 @@ export const getAnswerValue = (item: Countries, type: GameCategory) => {
       return item.name ?? ''
 
     case GAME_CATEGORIES.CAPITAL:
-      return item.capital?.[0] ?? ''
+      return item.capital ?? ''
 
     default:
       throw new Error(`Invalid ClassicType: ${type}`)

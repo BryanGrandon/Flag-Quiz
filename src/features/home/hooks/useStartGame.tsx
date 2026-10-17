@@ -46,10 +46,15 @@ const useStartGame = () => {
   }
 
   const startGame = (category: GameCategories) => {
+    const initCategoryKey = dynamicStorageKey({ base: 'init_category', dynamic: '' })
+    const initModeKey = dynamicStorageKey({ base: 'init_mode', dynamic: '' })
+    storage.save(initCategoryKey, category)
+
     switch (category) {
       case GAME_CATEGORIES.CAPITAL: {
         const params = new URLSearchParams({ category, mode: capitalSelectMode })
         storage.save(capitalDynamicKey, capitalSelectMode)
+        storage.save(initModeKey, capitalSelectMode) // Init
         navigate({ pathname: '/game/classic', search: params.toString() })
         break
       }
@@ -57,7 +62,8 @@ const useStartGame = () => {
       case GAME_CATEGORIES.COUNTRY: {
         const params = new URLSearchParams({ category, mode: countrySelectMode })
         storage.save(countryDynamicKey, countrySelectMode)
-        navigate({ pathname: '/game/classic', search: params.toString() })
+        storage.save(initModeKey, countrySelectMode) // Init
+        navigate({ pathname: '/game', search: params.toString() })
         break
       }
     }
