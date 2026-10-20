@@ -1,9 +1,10 @@
 import { ArrowLeft, Flame, Trophy } from 'lucide-react'
 import Button from '../../../shared/components/Button'
-import useStreak from '../hooks/useStreak'
+// import useStreak from '../hooks/useStreak'
+import { useGameEngine } from '../hooks/useGameEngine'
 
 const StreaksHeader = () => {
-  const { getStreakInfo } = useStreak()
+  const { getStreakInfo } = useGameEngine()
 
   const { category, mode } = getStreakInfo.general
   return (

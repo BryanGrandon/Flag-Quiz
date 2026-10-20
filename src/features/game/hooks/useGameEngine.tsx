@@ -10,7 +10,7 @@ import type { GameCategories } from '../../../config/games/categories'
 export const useGameEngine = () => {
   const { data: countries } = useCountriesQuery()
   const { remainingCountries } = useCountriesPool(countries)
-  const { streakActions } = useStreak()
+  const { streakActions, getStreakInfo } = useStreak()
 
   const categories = storage.load(dynamicStorageKey({ base: 'init_category', dynamic: '' })) as GameCategories
 
@@ -67,11 +67,15 @@ export const useGameEngine = () => {
   const handleOptionSelect = (option: string) => {
     const isCorrect = checkAnswer(option, winner ?? '')
 
-    if (isCorrect) {
-      gameActions.nextRound()
-    } else {
-      gameActions.restart()
-    }
+    setTimeout(() => {
+      if (isCorrect) {
+        gameActions.nextRound()
+        console.log('Winner')
+      } else {
+        console.log('Loser')
+        gameActions.restart()
+      }
+    }, 800)
   }
 
   const multipleChoice = {
@@ -81,5 +85,5 @@ export const useGameEngine = () => {
 
   // ----- Return ----- //
 
-  return { displayFlag, createRound, gameActions, winner, countries, multipleChoice }
+  return { displayFlag, createRound, gameActions, winner, countries, multipleChoice, getStreakInfo }
 }
