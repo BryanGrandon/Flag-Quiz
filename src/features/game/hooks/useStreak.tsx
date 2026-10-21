@@ -4,55 +4,51 @@ import { storage } from '../../../shared/utilities/storage'
 import type { GameCategories } from '../../../config/games/categories'
 import type { GameModes } from '../../../config/games/modes'
 
-const useStreak = () => {
-  const initCategoryKey = dynamicStorageKey({ base: 'init_category', dynamic: '' })
-  const initModeKey = dynamicStorageKey({ base: 'init_mode', dynamic: '' })
+type InitSetting = {
+  category: GameCategories
+  mode: GameModes
+}
 
-  const category: GameCategories = storage.load(initCategoryKey) ?? 'country'
-  const mode: GameModes = storage.load(initModeKey) ?? 'multiple_choice'
+const useStreak = ({ category, mode }: InitSetting) => {
+  const currentStreakKey = dynamicStorageKey({ base: 'streak', dynamic: `current_${category}-${mode}` })
+  const bestStreakKey = dynamicStorageKey({ base: 'streak', dynamic: `best_${category}-${mode}` })
 
-  type SavedStreak = { current: number; best: number } | undefined
+  const savedBestStreak: number = storage.load(bestStreakKey) ?? 0
+  const savedCurrentStreak: number = storage.load(currentStreakKey) ?? 0
 
-  const streakKey = dynamicStorageKey({ base: 'streak', dynamic: `${category}-${mode}` })
-  const savedStreak: SavedStreak = storage.load(streakKey) ?? undefined
-
-  const [streakManager, setStreakManager] = useState({
-    current: savedStreak?.current ?? 0,
-    best: savedStreak?.best ?? 0,
-  })
+  const [bestStreak, setBestStreak] = useState<number>(savedBestStreak)
+  const [currentStreak, setCurrentStreak] = useState<number>(savedCurrentStreak)
 
   const increaseStreak = () => {
-    setStreakManager((prev) => {
-      const current = prev.current + 1
-      const best = Math.max(prev.best, current)
-      const streak = { current, best }
-      storage.save(streakKey, streak)
-      return streak
+    setCurrentStreak((prev) => {
+      const current = prev + 1
+      storage.save(currentStreakKey, current)
+      setBestStreak((prevBest) => {
+        const best = Math.max(prevBest, current)
+        storage.save(bestStreakKey, best)
+        return best
+      })
+      return current
     })
   }
 
   const resetStreak = () => {
-    setStreakManager((prev) => {
-      const streak = { current: 0, best: prev.best }
-      storage.save(streakKey, streak)
-      return streak
-    })
+    const streak = 0
+    storage.save(currentStreakKey, streak)
+    setCurrentStreak(streak)
   }
 
-  const streakActions = {
+  const streakManager = {
     increase: increaseStreak,
     reset: resetStreak,
   }
 
-  const getStreakInfo = {
-    general: { category, mode },
-    streak: {
-      current: () => streakManager.current,
-      best: () => streakManager.best,
-    },
+  const getStreaks = {
+    current: currentStreak,
+    best: bestStreak,
   }
 
-  return { streakActions, getStreakInfo }
+  return { streakManager, getStreaks }
 }
 
 export default useStreak

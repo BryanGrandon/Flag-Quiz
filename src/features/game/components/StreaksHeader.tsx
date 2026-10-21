@@ -1,12 +1,16 @@
 import { ArrowLeft, Flame, Trophy } from 'lucide-react'
 import Button from '../../../shared/components/Button'
-// import useStreak from '../hooks/useStreak'
-import { useGameEngine } from '../hooks/useGameEngine'
+import type { GameCategories } from '../../../config/games/categories'
+import type { GameModes } from '../../../config/games/modes'
 
-const StreaksHeader = () => {
-  const { getStreakInfo } = useGameEngine()
+type StreaksHeaderProps = {
+  category: GameCategories
+  mode: GameModes
+  best: number
+  current: number
+}
 
-  const { category, mode } = getStreakInfo.general
+const StreaksHeader = ({ category, mode, best, current }: StreaksHeaderProps) => {
   return (
     <header className='flex flex-col gap-4 p-4'>
       <nav className='flex items-center justify-between'>
@@ -26,11 +30,10 @@ const StreaksHeader = () => {
         </section>
         <section className='flex justify-center gap-6 mb-10'>
           <p className='px-6 py-3 rounded-lg border border-green-400/60 bg-green-500/20 flex gap-2'>
-            <Trophy color='#05df72' /> Best: <span className='font-bold'>{getStreakInfo.streak.best()}</span>
+            <Trophy color='#05df72' /> Best: <span className='font-bold'>{best}</span>
           </p>
           <p className='px-6 py-3 rounded-lg border border-purple-400/60 bg-purple-500/20 flex gap-2'>
-            <Flame color='oklch(71.4% 0.203 305.504)' /> Streak:{' '}
-            <span className='font-bold'>{getStreakInfo.streak.current()}</span>
+            <Flame color='oklch(71.4% 0.203 305.504)' /> Streak: <span className='font-bold'>{current}</span>
           </p>
         </section>
       </section>

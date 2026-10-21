@@ -1,42 +1,63 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { useCountriesQuery } from './useCountriesQuery'
 import { useCountriesPool } from './useCountriesPool'
 import useStreak from './useStreak'
-import { dynamicStorageKey } from '../../../shared/utilities/dynamicStorageKey'
-import { storage } from '../../../shared/utilities/storage'
-import { checkAnswer, getAnswerValue } from '../utils/game.utils'
-import type { GameCategories } from '../../../config/games/categories'
+import { checkAnswer, getAnswerValue, getInitialGameSetting } from '../utils/game.utils'
+import type { Country } from '../types/country'
 
 export const useGameEngine = () => {
+  const { category, mode } = getInitialGameSetting()
+
   const { data: countries } = useCountriesQuery()
   const { remainingCountries } = useCountriesPool(countries)
-  const { streakActions, getStreakInfo } = useStreak()
-
-  const categories = storage.load(dynamicStorageKey({ base: 'init_category', dynamic: '' })) as GameCategories
+  const { streakManager, getStreaks } = useStreak({ category, mode })
 
   const [winner, setWinner] = useState<string | null>(null)
   const [displayFlag, setDisplayFlag] = useState<string | null>(null)
+  const [options, setOptions] = useState<string[]>([])
+  const isAnswerLocked = useRef(false)
+
+  // For Styles
+  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null)
+  const [showResult, setShowResult] = useState<boolean>(false)
+  const [colorCard, setColorCard] = useState<string>('')
 
   const createRound = useCallback(() => {
     const countriesPool = remainingCountries.get()
     const randomIndex = Math.floor(Math.random() * countriesPool.length)
     const randomItem = countriesPool[randomIndex]
     if (!randomItem) return
-    const value = getAnswerValue(randomItem, categories)
+    const value = getAnswerValue(randomItem, category)
+    const newPool = countriesPool.filter((item: Country) => getAnswerValue(item, category) !== value)
+    remainingCountries.set(newPool)
     setWinner(value)
     setDisplayFlag(randomItem.flag)
-  }, [remainingCountries, categories])
+
+    const optionsSet = new Set<string>([value])
+
+    while (optionsSet.size < 4) {
+      const randomIndex = Math.floor(Math.random() * countries.length)
+      const item = countries[randomIndex]
+      if (!item) continue
+      const optionValue = getAnswerValue(item, category)
+      if (optionValue && !optionsSet.has(optionValue)) optionsSet.add(optionValue)
+      if (optionsSet.size === countries.length) break
+    }
+    const options = Array.from(optionsSet).sort(() => Math.random() - 0.5)
+    setOptions(options)
+    setColorCard('border-transparent')
+  }, [remainingCountries, category, countries])
 
   // Actions
 
   const gameNextRound = () => {
     createRound()
-    streakActions.increase()
+    streakManager.increase()
   }
 
   const gameRestart = () => {
     remainingCountries.reset()
-    streakActions.reset()
+    streakManager.reset()
     createRound()
   }
 
@@ -45,45 +66,54 @@ export const useGameEngine = () => {
     restart: gameRestart,
   }
 
+  // ----- Try Again ----- //
+
   // ----- Multiple Choice ----- //
-  const NUMBER_OPTIONS = 4
 
-  const createOptions = () => {
-    if (winner === null || !countries?.length) return []
-
-    const optionsSet = new Set<string>([winner])
-
-    while (optionsSet.size < NUMBER_OPTIONS) {
-      const randomIndex = Math.floor(Math.random() * countries.length)
-      const item = countries[randomIndex]
-      if (!item) continue
-      const value = getAnswerValue(item, categories)
-      if (value && !optionsSet.has(value)) optionsSet.add(value)
-      if (optionsSet.size === countries.length) break
-    }
-    return Array.from(optionsSet).sort(() => Math.random() - 0.5)
+  const resetStyles = () => {
+    setShowResult(false)
+    setSelectedAnswer(null)
   }
 
   const handleOptionSelect = (option: string) => {
+    if (isAnswerLocked.current) return
+    isAnswerLocked.current = true
+
     const isCorrect = checkAnswer(option, winner ?? '')
+    setSelectedAnswer(option)
+    setColorCard(() => {
+      if (isCorrect) return 'border-green-500'
+      else return 'border-red-500'
+    })
+
+    setShowResult(true)
 
     setTimeout(() => {
       if (isCorrect) {
         gameActions.nextRound()
-        console.log('Winner')
+        resetStyles()
       } else {
-        console.log('Loser')
         gameActions.restart()
+        resetStyles()
       }
+      isAnswerLocked.current = false
     }, 800)
   }
 
+  const getButtonStyle = (option: string) => {
+    if (!showResult) return 'bg-gray-700 hover:bg-gray-600'
+    if (checkAnswer(option, winner ?? '')) return 'bg-green-600 border-green-400 scale-102'
+    if (option === selectedAnswer) return 'bg-red-600 border-red-400'
+    return 'bg-gray-700 opacity-40'
+  }
+
   const multipleChoice = {
-    options: createOptions,
+    options,
     handlerOptions: handleOptionSelect,
+    styleButtons: getButtonStyle,
   }
 
   // ----- Return ----- //
 
-  return { displayFlag, createRound, gameActions, winner, countries, multipleChoice, getStreakInfo }
+  return { displayFlag, createRound, multipleChoice, getStreaks, colorCard }
 }

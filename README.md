@@ -1,6 +1,19 @@
 # Flag Quiz
 
+A country flag quiz game built with React and TypeScript. Test your geographical knowledge by identifying countries from their flags and challenging yourself to improve your score and streak.
+
+## Live Demo
+
 - [🌐 Website Demo.](https://bryangrandon.github.io/Flag-Quiz/)
+
+## Features
+
+- Multiple-choice questions: Identify countries by their flags.
+- Interactive gameplay: Select answers and receive immediate feedback.
+- Score tracking: Keep track of your correct answers.
+- Streak system: Build consecutive correct-answer streaks.
+- Responsive design: Play on desktop and mobile devices.
+- Persistent statistics: Save supported game statistics locally.
 
 ## 📚 Technologies Used
 
