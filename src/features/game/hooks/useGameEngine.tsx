@@ -66,8 +66,6 @@ export const useGameEngine = () => {
     restart: gameRestart,
   }
 
-  // ----- Try Again ----- //
-
   // ----- Multiple Choice ----- //
 
   const resetStyles = () => {
@@ -113,7 +111,57 @@ export const useGameEngine = () => {
     styleButtons: getButtonStyle,
   }
 
+  // ----- Writing ----- //
+
+  const [inputWriting, setInputWriting] = useState('')
+  const [isWrongInput, setIsWrongInput] = useState<boolean>(false)
+
+  const setInputValue = (value: string) => {
+    const cleanValue = value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '')
+    setInputWriting(cleanValue)
+  }
+
+  const submit = () => {
+    if (isAnswerLocked.current) return
+    isAnswerLocked.current = true
+
+    const isCorrect = checkAnswer(inputWriting, winner ?? '')
+    setIsWrongInput(isCorrect)
+
+    setTimeout(() => {
+      if (isCorrect) {
+        gameActions.nextRound()
+        setInputWriting('')
+      } else {
+        gameActions.restart()
+        setInputWriting('')
+      }
+      isAnswerLocked.current = false
+    }, 800)
+  }
+
+  const getInputStyle = useCallback(() => {
+    if (!isAnswerLocked.current) {
+      return 'border-gray-600 focus:ring-green-400'
+    }
+
+    if (isAnswerLocked.current) {
+      return checkAnswer(inputWriting, winner ?? '') ? 'border-green-400' : 'border-red-400'
+    }
+  }, [inputWriting, winner])
+
+  const answer = !isWrongInput ? winner : ''
+
+  const writing = {
+    setInput: setInputValue,
+    inputValue: inputWriting,
+    styleInput: getInputStyle,
+    submit,
+    isWrongInput,
+    answer,
+  }
+
   // ----- Return ----- //
 
-  return { displayFlag, createRound, multipleChoice, getStreaks, colorCard }
+  return { displayFlag, createRound, multipleChoice, getStreaks, colorCard, writing, isAnswerLocked }
 }
