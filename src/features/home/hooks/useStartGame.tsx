@@ -4,6 +4,7 @@ import { GAME_CATEGORIES, type GameCategories } from '../../../config/games/cate
 import { dynamicStorageKey } from '../../../shared/utilities/dynamicStorageKey'
 import { storage } from '../../../shared/utilities/storage'
 import { useNavigate } from 'react-router-dom'
+import { ROUTER_GAME } from '../../../shared/constants/router'
 
 const useStartGame = () => {
   const navigate = useNavigate()
@@ -55,7 +56,7 @@ const useStartGame = () => {
         const params = new URLSearchParams({ category, mode: capitalSelectMode })
         storage.save(capitalDynamicKey, capitalSelectMode)
         storage.save(initModeKey, capitalSelectMode) // Init
-        navigate({ pathname: '/game/classic', search: params.toString() })
+        navigate({ pathname: ROUTER_GAME, search: params.toString() })
         break
       }
 
@@ -63,7 +64,7 @@ const useStartGame = () => {
         const params = new URLSearchParams({ category, mode: countrySelectMode })
         storage.save(countryDynamicKey, countrySelectMode)
         storage.save(initModeKey, countrySelectMode) // Init
-        navigate({ pathname: '/game', search: params.toString() })
+        navigate({ pathname: ROUTER_GAME, search: params.toString() })
         break
       }
     }

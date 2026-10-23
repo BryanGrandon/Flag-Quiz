@@ -99,7 +99,7 @@ export const useGameEngine = () => {
   }
 
   const getButtonStyle = (option: string) => {
-    if (!showResult) return 'bg-gray-700 hover:bg-gray-600'
+    if (!showResult) return 'bg-gray-800 hover:bg-gray-700 hover:scale-102 active:scale-98'
     if (checkAnswer(option, winner ?? '')) return 'bg-green-600 border-green-400 scale-102'
     if (option === selectedAnswer) return 'bg-red-600 border-red-400'
     return 'bg-gray-700 opacity-40'
@@ -114,9 +114,9 @@ export const useGameEngine = () => {
   // ----- Writing ----- //
 
   const [inputWriting, setInputWriting] = useState('')
-  const [isWrongInput, setIsWrongInput] = useState<boolean>(false)
+  const [isWrongAnswer, setIsWrongAnswer] = useState<boolean>(false)
 
-  const setInputValue = (value: string) => {
+  const handlerInputValue = (value: string) => {
     const cleanValue = value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '')
     setInputWriting(cleanValue)
   }
@@ -125,40 +125,43 @@ export const useGameEngine = () => {
     if (isAnswerLocked.current) return
     isAnswerLocked.current = true
 
+    setColorCard(() => {
+      if (isCorrect) return 'border-green-500'
+      else return 'border-red-500'
+    })
+
     const isCorrect = checkAnswer(inputWriting, winner ?? '')
-    setIsWrongInput(isCorrect)
+    console.log(isCorrect + ' Correct')
+    setIsWrongAnswer(!isCorrect)
 
     setTimeout(() => {
       if (isCorrect) {
         gameActions.nextRound()
         setInputWriting('')
+        setIsWrongAnswer(false)
       } else {
         gameActions.restart()
         setInputWriting('')
+        setIsWrongAnswer(false)
       }
       isAnswerLocked.current = false
-    }, 800)
+    }, 1200)
   }
 
   const getInputStyle = useCallback(() => {
-    if (!isAnswerLocked.current) {
-      return 'border-gray-600 focus:ring-green-400'
-    }
-
-    if (isAnswerLocked.current) {
-      return checkAnswer(inputWriting, winner ?? '') ? 'border-green-400' : 'border-red-400'
-    }
-  }, [inputWriting, winner])
-
-  const answer = !isWrongInput ? winner : ''
+    let style = ''
+    if (!isWrongAnswer) style = 'border-gray-600 focus:ring-green-400'
+    if (isWrongAnswer) style = checkAnswer(inputWriting, winner ?? '') ? 'border-green-400' : 'border-red-400'
+    return style
+  }, [inputWriting, winner, isWrongAnswer])
 
   const writing = {
-    setInput: setInputValue,
-    inputValue: inputWriting,
-    styleInput: getInputStyle,
+    handlerInput: handlerInputValue,
+    value: inputWriting,
+    style: getInputStyle,
     submit,
-    isWrongInput,
-    answer,
+    isWrongAnswer,
+    answer: winner ?? '',
   }
 
   // ----- Return ----- //

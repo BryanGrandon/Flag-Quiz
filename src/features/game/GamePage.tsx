@@ -4,8 +4,9 @@ import { dynamicStorageKey } from '../../shared/utilities/dynamicStorageKey'
 import { storage } from '../../shared/utilities/storage'
 import StreaksHeader from './components/StreaksHeader'
 import { useGameEngine } from './hooks/useGameEngine'
-import Button from '../../shared/components/Button'
 import type { GameCategories } from '../../config/games/categories'
+import MultipleChoice from './components/MultipleChoice'
+import Writing from './components/Writing'
 
 const GamePage = () => {
   const mode = storage.load(dynamicStorageKey({ base: 'init_mode', dynamic: '' })) as GameModes
@@ -30,46 +31,13 @@ const GamePage = () => {
           </picture>
 
           {mode === TYPE_MODES.MULTIPLE_CHOICE ? (
-            <div className='flex w-full max-w-md flex-col gap-3 sm:gap-4'>
-              {multipleChoice.options.map((option, index) => (
-                <Button
-                  key={option}
-                  title={option}
-                  onClick={() => multipleChoice.handlerOptions(option)}
-                  className={`w-full border transition-all  ${multipleChoice.styleButtons(option)}`}
-                  icon={
-                    <span className='flex size-7 shrink-0 items-center justify-center rounded-full border border-current/30 text-sm font-semibold'>
-                      {String.fromCharCode(65 + index)}
-                    </span>
-                  }
-                />
-              ))}
-            </div>
+            <MultipleChoice
+              options={multipleChoice.options}
+              handlerOptions={multipleChoice.handlerOptions}
+              styleButtons={multipleChoice.styleButtons}
+            />
           ) : (
-            <form
-              className='flex flex-col sm:flex-row gap-4'
-              onSubmit={(e) => {
-                e.preventDefault()
-                writing.submit()
-              }}
-            >
-              <input
-                type='text'
-                value={writing.inputValue}
-                onChange={(e) => writing.setInput(e.target.value)}
-                placeholder='Type your answer...'
-                autoComplete='off'
-                className={`flex-1 px-4 py-3 rounded-xl bg-gray-800 border transition-all outline-none focus:ring-green-400 focus:border-transparent ${writing.styleInput()}`}
-              />
-
-              <button
-                type='submit'
-                disabled={isAnswerLocked.current}
-                className='px-6 py-3 rounded-xl bg-green-600 hover:bg-green-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium'
-              >
-                Submit
-              </button>
-            </form>
+            <Writing writingOptions={writing} isAnswerLocked={isAnswerLocked} />
           )}
         </section>
       </article>
