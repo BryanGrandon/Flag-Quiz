@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { fetchData } from '../../../shared/services/api/fetchData'
+import { fetchData } from '../../../services/fetch/fetchData'
 import { COUNTRIES_URL, type CountryApi } from '../../../services/api/countries'
 import type { Country } from '../types/country'
 

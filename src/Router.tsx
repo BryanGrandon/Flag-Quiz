@@ -24,14 +24,6 @@ const router = createHashRouter([
         element: <Games />,
         children: [
           {
-            path: 'classic',
-            lazy: async () => {
-              const Classic = await import('./features/classicGame/ClassicGamePage')
-              return { Component: Classic.default }
-            },
-            hydrateFallbackElement: TheFallback('Loading Game'),
-          },
-          {
             index: true,
             lazy: async () => {
               const MultipleChoice = await import('./features/game/GamePage')
