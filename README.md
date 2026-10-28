@@ -15,39 +15,49 @@ A country flag quiz game built with React and TypeScript. Test your geographical
 - Responsive design: Play on desktop and mobile devices.
 - Persistent statistics: Save supported game statistics locally.
 
-## 📚 Technologies Used
+## 📚 Tech Stack
 
 [![React](https://img.shields.io/badge/React-61DAFB?style=flat&logo=react&logoColor=black)](https://react.dev/)
 [![TS](https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=fff)](https://vite.dev/)
 [![Tailwind](https://img.shields.io/badge/Tailwind_CSS-grey?style=flag&logo=tailwind-css&logoColor=38B2AC)](https://tailwindcss.com/)
 
-## ⚙️ Installation
-
-Clone the repository:
+## 📦 Installation
 
 ```bash
+# Clone the repository:
 git clone https://github.com/BryanGrandon/Flag-Quiz.git
-```
 
-Access the project folder
-
-```bash
+# Access the project folder
 cd Flag-Quiz
+
+# Install all the project dependencies with:
+pnpm install
+
+# And start the development server with:
+pnpm run dev
 ```
 
-Install all the project dependencies with:
+## 📁 Project Structure
 
-```bash
-npm install
+```text
+src/
+├── config/
+├── features/
+├── layout/
+├── services/
+├── shared/
+└── styles/
 ```
 
-And start the development server with:
+## ⚙️ How It Works
 
-```bash
-npm run dev
-```
+1. Countries are fetched from the API.
+2. A random country is selected.
+3. Four options are generated.
+4. The player's answer is validated.
+5. The streak and score are updated.
 
-## License
+## 📄 License
 
 See the [LICENSE](/LICENCE.md) file for license rights and limitations (MIT).
